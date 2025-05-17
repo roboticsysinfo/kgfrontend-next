@@ -1,0 +1,9 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://kissangrowth.com/sitemap.xml
+Sitemap: https://kissangrowth.com/sitemap/farmers
+Sitemap: https://kissangrowth.com/sitemap/shops
+Sitemap: https://kissangrowth.com/sitemap/products
+Sitemap: https://kissangrowth.com/sitemap/blogs
+Sitemap: https://kissangrowth.com/sitemap/pages
