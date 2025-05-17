@@ -55,19 +55,19 @@ const KGMobileAppsSection = () => {
 
                         <div className='col-lg-3 col-xs-12 col-sm-12'>
                             <div className="app-image">
-                                <img src="/assets/app_screenshots/farmer/farmer1.jpg" width={251} height={497} alt="Farmer App" />
+                                <Image src="/assets/app_screenshots/farmer/farmer1.jpg" width={251} height={497} alt="Farmer App" />
                             </div>
                         </div>
 
                         <div className='col-lg-3 col-xs-12 col-sm-12'>
                             <div className="app-image">
-                                <img src="/assets/app_screenshots/farmer/farmer2.jpg" width={251} height={497} alt="Farmer App" />
+                                <Image src="/assets/app_screenshots/farmer/farmer2.jpg" width={251} height={497} alt="Farmer App" />
                             </div>
                         </div>
 
                         <div className='col-lg-3 col-xs-12 col-sm-12'>
                             <div className="app-image">
-                                <img src="/assets/app_screenshots/farmer/farmer3.jpg" width={251} height={497} alt="Farmer App" />
+                                <Image src="/assets/app_screenshots/farmer/farmer3.jpg" width={251} height={497} alt="Farmer App" />
                             </div>
                         </div>
 
@@ -94,12 +94,12 @@ const KGMobileAppsSection = () => {
                             </div>
                             <div className='col-lg-3 col-xs-12 col-sm-12'>
                                 <div className="app-image">
-                                    <img src="/assets/app_screenshots/farmer/farmerorder.jpg" width={251} height={497} alt="" />
+                                    <Image src="/assets/app_screenshots/farmer/farmerorder.jpg" width={251} height={497} alt="" />
                                 </div>
                             </div>
                             <div className='col-lg-3 col-xs-12 col-sm-12'>
                                 <div className="app-image">
-                                    <img src="/assets/app_screenshots/farmer/farmerpoints.jpg" width={251} height={497} alt="" />
+                                    <Image src="/assets/app_screenshots/farmer/farmerpoints.jpg" width={251} height={497} alt="" />
                                 </div>
                             </div>
                         </div>
