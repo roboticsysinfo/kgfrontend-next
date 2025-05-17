@@ -1,15 +1,21 @@
-"use client"
-import React, { useEffect } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
 import { fetchReviewsByCustomerId, deleteReview } from "@/redux/slices/reviewSlice";
 
 const MyReviews = () => {
-
   const dispatch = useDispatch();
-  const { reviews, loading, successMessage, error } = useSelector((state) => state.reviews);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const customerId = user?.id;
+  const { reviews, loading } = useSelector((state) => state.reviews);
+  const [customerId, setCustomerId] = useState(null); // new state
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const user = JSON.parse(userData);
+      setCustomerId(user?.id);
+    }
+  }, []);
 
   useEffect(() => {
     if (customerId) {
@@ -22,8 +28,6 @@ const MyReviews = () => {
       dispatch(deleteReview(reviewId));
     }
   };
-
-  console.log("Customer Reviews", reviews)
 
   const columns = [
     {
@@ -63,12 +67,9 @@ const MyReviews = () => {
   ];
 
   return (
-
-
     <div className="container mt-4">
-
       <h4>My Reviews</h4>
-      <hr/>
+      <hr />
       <DataTable
         columns={columns}
         data={reviews}
@@ -76,10 +77,7 @@ const MyReviews = () => {
         pagination
         highlightOnHover
       />
-
     </div>
-
-    
   );
 };
 
