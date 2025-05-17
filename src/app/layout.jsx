@@ -2,6 +2,7 @@
 import "./font.css";
 import "./globals.scss";
 import "./app.css";
+import "./notification.css";
 import ClientWrapper from "@/components/ClientWrapper";
 import Script from "next/script";
 

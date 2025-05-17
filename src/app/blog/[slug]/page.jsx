@@ -11,27 +11,29 @@ const extractIdFromSlug = (slug) => {
     return parts[parts.length - 1];
 };
 
+
 export async function generateMetadata({ params }) {
+
     const blogId = extractIdFromSlug(params.slug);
 
-    console.log("blogId", blogId)
-
     try {
+
         const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/blog/${blogId}`);
         const blog = res.data;
-
-        console.log("blog", blog)
 
         return {
             title: blog.metaTitle,
             description: blog.metaDescription,
             keywords: blog.metaKeywords,
         };
+
     } catch (error) {
+
         return {
             title: "Blog Not Found",
             description: "Blog not available",
         };
+        
     }
 }
 

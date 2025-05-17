@@ -67,9 +67,6 @@ export const fetchPointTransactions = createAsyncThunk(
   async (farmerId, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(`/farmer/points-transaction/${farmerId}`);
-
-      console.log("points transaction history", res.data)
-
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
