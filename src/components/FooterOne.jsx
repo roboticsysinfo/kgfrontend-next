@@ -196,8 +196,6 @@ const FooterOne = () => {
                             {siteDetails?.socialMedia?.map((item, index) => {
                                 const platform = item.platform?.toLowerCase();
 
-                                console.log(item.platform, item.url);
-
                                 // Map platform to Phosphor icon class
                                 const iconMap = {
                                     instagram: "ph-instagram-logo",
