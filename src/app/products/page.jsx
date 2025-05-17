@@ -3,13 +3,17 @@ import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import ShopSection from "@/components/ShopSection";
 import { Suspense } from "react";
 
+
 export async function generateMetadata() {
+
   return {
     title: "Shop Fresh Local Products From Kissan Growth",
-    description: "Browse and buy fresh, locally sourced products directly from farmers on Kissan Growth...",
+    description: "Browse and buy fresh, locally sourced products directly from farmers on Kissan Growth. Enjoy high-quality, sustainable produce delivered to your door. Shop now!",
     keywords: "Fresh local products, Buy direct from farmers, Sustainable produce...",
   };
+
 }
+
 
 const page = async () => {
   return (

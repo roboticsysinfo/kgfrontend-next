@@ -1,6 +1,7 @@
 import BlogDetail from "@/components/BlogDetail";
 import Breadcrumb from "@/components/Breadcrumb";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
+import api from "@/utils/api";
 import axiosInstance from "@/utils/axiosInstance";
 import axios from "axios";
 
@@ -35,6 +36,7 @@ export async function generateMetadata({ params }) {
 }
 
 const Page = async ({ params }) => {
+
     const blogId = extractIdFromSlug(params.slug);
 
     try {
