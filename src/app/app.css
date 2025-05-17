@@ -694,3 +694,7 @@ ul.ProductPagination {
   white-space: normal !important; 
   line-height: 1.4 !important;
 }
+
+.product-card__thumb{
+    overflow: hidden !important;
+}
