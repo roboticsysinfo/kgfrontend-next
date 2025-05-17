@@ -46,7 +46,7 @@ const page = () => {
       {/* NewsletterOne */}
       <NewsletterOne />
 
-      {/* FooterTwo */}
+      {/* FooterOne */}
       <FooterOne />
 
       {/* BottomFooter */}

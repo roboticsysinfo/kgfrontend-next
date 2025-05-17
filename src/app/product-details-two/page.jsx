@@ -1,7 +1,7 @@
 import BottomFooter from "@/components/BottomFooter";
 import Breadcrumb from "@/components/Breadcrumb";
-import FooterTwo from "@/components/FooterTwo";
-import HeaderTwo from "@/components/HeaderTwo";
+import FooterOne from "@/components/FooterOne";
+import HeaderOne from "@/components/HeaderOne";
 import NewArrivalTwo from "@/components/NewArrivalTwo";
 import NewsletterOne from "@/components/NewsletterOne";
 import ProductDetailsTwo from "@/components/ProductDetailsTwo";
@@ -28,8 +28,8 @@ const page = () => {
       {/* Preloader */}
       <Preloader />
 
-      {/* HeaderTwo */}
-      <HeaderTwo category={true} />
+      {/* HeaderOne */}
+      <HeaderOne category={true} />
 
       {/* Breadcrumb */}
       <Breadcrumb title={"Product Details"} />
@@ -46,8 +46,8 @@ const page = () => {
       {/* NewsletterOne */}
       <NewsletterOne />
 
-      {/* FooterTwo */}
-      <FooterTwo />
+      {/* FooterOne */}
+      <FooterOne />
 
       {/* BottomFooter */}
       <BottomFooter />
