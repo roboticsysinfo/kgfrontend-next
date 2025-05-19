@@ -1,17 +1,18 @@
+"use client"
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCustomers } from '../../../redux/slices/customerSlice';
+import { fetchAllCustomers } from '@/redux/slices/customerSlice';
 import DataTable from 'react-data-table-component';
 import { Spinner } from 'react-bootstrap';
 import { FaCoins } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 
 
 const CustomerPointsTable = () => {
 
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const router = useRouter();
     const { customers, loading, error } = useSelector((state) => state.customer);
     const [searchQuery, setSearchQuery] = useState('');
 
@@ -92,7 +93,7 @@ const CustomerPointsTable = () => {
                 <div>
                     <button
                         className="btn btn-sm btn-primary me-2"
-                        onClick={() => navigate(`/admin/customer-points/${row._id}`)}
+                        onClick={() => router.push(`/admin/customer-points/${row._id}`)}
                     >
                         View Referred
                     </button>
