@@ -1,16 +1,17 @@
 "use client"
 import React from "react"
 import axios from "axios";
+import Cookies from "js-cookie";
 import { toast } from "react-hot-toast";
 
 const axiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URI}`, // ⚡ API Base URL
+  baseURL: `${process.env.NEXT_PUBLIC_API_URI}`,
 });
 
-// ✅ Request Interceptor (Har request ke sath token attach hoga)
+// ✅ Request Interceptor (Token from Cookies)
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token"); // 🍪 Get token from cookie
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -19,17 +20,16 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ✅ Response Interceptor (Token expire hone par auto logout)
+// ✅ Response Interceptor (Handle 401 errors)
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      localStorage.removeItem("userRole");
-      localStorage.removeItem("farmerId");
-      localStorage.removeItem("farmerName");
-;
+      Cookies.remove("token");
+      Cookies.remove("user");
+      Cookies.remove("userRole");
+      Cookies.remove("farmerId");
+      Cookies.remove("farmerName");
 
       toast.error("Session expired! Please log in again.");
       

@@ -61,7 +61,6 @@ const MyReviews = () => {
         </button>
       ),
       ignoreRowClick: true,
-      allowOverflow: true,
       button: true,
     },
   ];
