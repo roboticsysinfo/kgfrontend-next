@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,10 +7,10 @@ import {
   createCategory,
   updateCategory,
   deleteCategory,
-} from "../../redux/slices/categorySlice";
+} from "@/redux/slices/categorySlice";
 import { Modal, Button, Form } from "react-bootstrap";
 
-const CategoryList = () => {
+const Page = () => {
   const dispatch = useDispatch();
   const { categories, status } = useSelector((state) => state.categories);
   const [showModal, setShowModal] = useState(false);
@@ -72,7 +73,7 @@ const CategoryList = () => {
       cell: (row) =>
         row.category_image ? (
           <img
-            src={`${process.env.REACT_APP_BASE_URL_PRIMARY}/uploads/${row.category_image}`}
+            src={row.category_image}
             alt={row.name}
             width="50"
           />
@@ -165,4 +166,4 @@ const CategoryList = () => {
   );
 };
 
-export default CategoryList;
+export default Page;

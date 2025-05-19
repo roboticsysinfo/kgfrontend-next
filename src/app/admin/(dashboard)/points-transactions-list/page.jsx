@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPointTransactions, getFarmerById, getFarmerByIdForAdmin } from '../../../redux/slices/farmerSlice';
-import { useParams } from 'react-router-dom';
+import { fetchPointTransactions, getFarmerByIdForAdmin } from '@/redux/slices/farmerSlice';
+import { useSearchParams } from 'next/navigation';
 import { Alert, Spinner } from 'react-bootstrap';
 import { FaCalendar, FaCoins } from 'react-icons/fa6';
 
@@ -15,13 +17,11 @@ const borderColors = {
     new_product_added: "#1ABC9C"
 };
 
-// Helper to format date as '11 April 2025'
 const formatDate = (dateStr) => {
     const options = { day: '2-digit', month: 'long', year: 'numeric' };
     return new Date(dateStr).toLocaleDateString(undefined, options);
 };
 
-// Group transactions by date
 const groupByDate = (transactions) => {
     return transactions.reduce((groups, tx) => {
         const date = formatDate(tx.createdAt);
@@ -31,18 +31,21 @@ const groupByDate = (transactions) => {
     }, {});
 };
 
-const PointsTransactionsList = () => {
-
+const Page = () => {
     const dispatch = useDispatch();
-    const { farmerId } = useParams();
+    const searchParams = useSearchParams();
+    const farmerId = searchParams.get("farmerId"); // URL: ?farmerId=123
+
     const { farmerDetails, pointsTransactions, loading, error } = useSelector((state) => state.farmers);
 
     const farmerName = farmerDetails?.name;
     const totalPoints = farmerDetails?.points || 0;
 
     useEffect(() => {
-        dispatch(getFarmerByIdForAdmin(farmerId));
-        dispatch(fetchPointTransactions(farmerId));
+        if (farmerId) {
+            dispatch(getFarmerByIdForAdmin(farmerId));
+            dispatch(fetchPointTransactions(farmerId));
+        }
     }, [dispatch, farmerId]);
 
     const groupedTransactions = groupByDate(pointsTransactions || []);
@@ -52,7 +55,6 @@ const PointsTransactionsList = () => {
             <h4 className='mb-30'>{farmerName ? `${farmerName}'s` : 'Farmer'} Points Transactions</h4>
             <hr />
 
-            {/* Total Points Section */}
             <div className="d-flex align-items-center mb-3">
                 <FaCoins size={24} color="#f39c12" className="me-2" />&ensp;
                 <h5 className="mb-0">Total Points: <strong>{totalPoints}</strong></h5>
@@ -102,4 +104,4 @@ const PointsTransactionsList = () => {
     );
 };
 
-export default PointsTransactionsList;
+export default Page;

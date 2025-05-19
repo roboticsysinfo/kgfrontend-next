@@ -1,11 +1,12 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { getAllHelpSupport, deleteHelpSupport } from "../../redux/slices/customerHelpSupportSlice";
+import { getAllHelpSupport, deleteHelpSupport } from "@/redux/slices/customerHelpSupportSlice";
 import { Spinner } from "react-bootstrap";
 import { Button } from "react-bootstrap";
 
-const CustomerHelpSupport = () => {
+const Page = () => {
   const dispatch = useDispatch();
   const { supports, loading } = useSelector((state) => state.customerHelpSupport);
 
@@ -101,4 +102,4 @@ const CustomerHelpSupport = () => {
   );
 };
 
-export default CustomerHelpSupport;
+export default Page;

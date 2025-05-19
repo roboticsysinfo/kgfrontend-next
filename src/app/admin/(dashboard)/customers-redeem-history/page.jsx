@@ -1,25 +1,26 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchCustomerRedeemProductHistory } from '../../../redux/slices/customerRedeemProductSlice';
-import axiosInstance from '../../../utils/axiosInstance';
-import { Link } from 'react-router-dom';
+import { fetchCustomerRedeemProductHistory } from '@/redux/slices/customerRedeemProductSlice';
+import axiosInstance from '@/utils/axiosInstance';
+import Link from 'next/link';
 
 
-const CustomerRedeemHistory = () => {
+const Page = () => {
+
     const dispatch = useDispatch();
     const { c_redemptionHistory, loading } = useSelector(state => state.customerRedeemProducts);
 
     const [search, setSearch] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 
-    console.log("c_redemptionHistory", c_redemptionHistory)
-
     useEffect(() => {
         dispatch(fetchCustomerRedeemProductHistory());
     }, [dispatch]);
+
 
     useEffect(() => {
         const lowerSearch = search.toLowerCase();
@@ -31,8 +32,8 @@ const CustomerRedeemHistory = () => {
         setFilteredData(filtered);
     }, [search, c_redemptionHistory]);
 
-    // Generate Bill Api
 
+    // Generate Bill Api
 
     const columns = [
         {
@@ -70,7 +71,7 @@ const CustomerRedeemHistory = () => {
         {
             name: 'Invoice',
             cell: row => (
-                <Link to={`/admin/customer-invoice-details/${row.orderId}`}>
+                <Link href={`/admin/customer-invoice/${row.orderId}`}>
                     View Invoice
                 </Link>
             )
@@ -109,4 +110,4 @@ const CustomerRedeemHistory = () => {
     );
 };
 
-export default CustomerRedeemHistory;
+export default Page;

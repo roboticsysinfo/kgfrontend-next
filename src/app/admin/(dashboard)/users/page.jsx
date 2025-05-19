@@ -1,8 +1,8 @@
-// src/components/Users.js
+"use client"
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdmins, createAdmin, deleteAdmin } from "../../../redux/slices/adminSlice";
+import { fetchAdmins, createAdmin, deleteAdmin } from "@/redux/slices/adminSlice";
 import toast from "react-hot-toast";
 import { Button } from "react-bootstrap";
 

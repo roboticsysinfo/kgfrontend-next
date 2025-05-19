@@ -7,11 +7,12 @@ import {
   updateFarmingTip,
   createFarmingTip,
   clearTipMessages
-} from '../../../redux/slices/farmingTipsSlice';
+} from '@/redux/slices/farmingTipsSlice';
 import { Modal, Button, Form } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 
-const FarmingTipsTable = () => {
+const Page = () => {
+
   const dispatch = useDispatch();
   const { tips, loading, error, successMessage } = useSelector((state) => state.farmingTips);
 
@@ -174,4 +175,4 @@ const FarmingTipsTable = () => {
   );
 };
 
-export default FarmingTipsTable;
+export default Page;

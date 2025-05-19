@@ -1,9 +1,10 @@
+"use client"
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { addCustomerRedeemProduct } from '../../redux/slices/customerRedeemProductSlice';
+import { addCustomerRedeemProduct } from '@/redux/slices/customerRedeemProductSlice';
 
-const AddCustomerProduct = () => {
+const Page = () => {
     
     const dispatch = useDispatch();
 
@@ -113,4 +114,4 @@ const AddCustomerProduct = () => {
     );
 };
 
-export default AddCustomerProduct;
+export default Page;

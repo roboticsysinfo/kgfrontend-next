@@ -1,9 +1,10 @@
+"use client"
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { createRedeemProduct } from '../../redux/slices/redeemProductSlice';
+import { createRedeemProduct } from '@/redux/slices/redeemProductSlice';
 import toast from 'react-hot-toast';
 
-const AddRedeemProduct = () => {
+const Page = () => {
 
     const dispatch = useDispatch();
     const [formData, setFormData] = useState({
@@ -85,6 +86,6 @@ const AddRedeemProduct = () => {
 
 }
 
-export default AddRedeemProduct
+export default Page
 
 

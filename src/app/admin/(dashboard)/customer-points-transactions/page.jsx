@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { Alert, Spinner } from 'react-bootstrap';
 import { FaCalendar, FaCoins } from 'react-icons/fa6';
-import { fetchCustomerById, fetchCustomerPointsTransactions } from '../../../redux/slices/customerSlice';
+import { fetchCustomerById, fetchPage } from '@/redux/slices/customerSlice';
+import { useParams } from 'next/navigation';
 
 const borderColors = {
   referral: "#2ECC71",
@@ -29,9 +31,11 @@ const groupByDate = (transactions) => {
   }, {});
 };
 
-const CustomerPointsTransactions = () => {
+const Page = () => {
+
   const dispatch = useDispatch();
-  const { customerId } = useParams();
+  const params = useParams();
+  const customerId = params?.customerId;
 
   const {
     customer,
@@ -41,8 +45,10 @@ const CustomerPointsTransactions = () => {
   } = useSelector((state) => state.customer);
 
   useEffect(() => {
-    dispatch(fetchCustomerById(customerId));
-    dispatch(fetchCustomerPointsTransactions(customerId));
+    if (customerId) {
+      dispatch(fetchCustomerById(customerId));
+      dispatch(fetchPage(customerId));
+    }
   }, [dispatch, customerId]);
 
   const customerName = customer?.name || "Customer";
@@ -103,4 +109,4 @@ const CustomerPointsTransactions = () => {
   );
 };
 
-export default CustomerPointsTransactions;
+export default Page;

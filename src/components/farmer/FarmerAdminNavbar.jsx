@@ -7,6 +7,7 @@ import { fetchNotifications } from "../../redux/slices/notificationsSlice";
 import { FaRegBell } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Cookies from 'js-cookie';  
 
 
 const FarmerAdminNavbar = () => {
@@ -15,29 +16,26 @@ const FarmerAdminNavbar = () => {
   const dispatch = useDispatch();
   const unreadCount = useSelector((state) => state.notifications.unreadCount);
 
-
   useEffect(() => {
-    const farmerId = localStorage.getItem('farmerId');
+    const farmerId = Cookies.get('farmerId');
     if (farmerId) {
       dispatch(fetchNotifications());
     }
   }, [dispatch]);
 
+  
   const onLogout = () => {
-    // Clear the token and user role from localStorage
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("farmerId");
-    localStorage.removeItem("farmerName")
-    router.push("/farmer/login"); // redirect to '/Farmer/login'
+    Cookies.remove('token');
+    Cookies.remove('userRole');
+    Cookies.remove('farmerId');
+    Cookies.remove('farmerName');
+    router.push("/farmer/login");
   };
 
-  // Get the userRole from localStorage
-  const userRole = localStorage.getItem("userRole");
-  const username = localStorage.getItem("farmerName");
+  const userRole = Cookies.get('userRole');
+  const username = Cookies.get('farmerName');
 
   return (
-
     <Navbar bg="success" variant="dark" className="px-20 py-20">
       <Navbar.Brand href="/">Farmer Dashboard</Navbar.Brand>
       <Nav className="ms-auto">

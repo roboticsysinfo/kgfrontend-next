@@ -1,7 +1,8 @@
+"use client"
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import DataTable from 'react-data-table-component';
-import { fetchAllFarmerPlans } from '../../../redux/slices/planPointsHistorySlice';
+import { fetchAllFarmerPlans } from '@/redux/slices/planPointsHistorySlice';
 
 const FarmerPlansHistory = () => {
 

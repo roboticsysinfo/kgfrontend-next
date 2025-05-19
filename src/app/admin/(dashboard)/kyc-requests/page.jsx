@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component';
 import { fetchKYCRequests, approveKYCRequest, rejectKYCRequest } from '@/redux/slices/kycRequestsSlice';
 import toast from 'react-hot-toast';
 
-const KYCRequestsPage = () => {
+const Page = () => {
     const dispatch = useDispatch();
     const { data: kycRequests, loading, error } = useSelector((state) => state.kycRequests);
 
@@ -107,4 +107,4 @@ const KYCRequestsPage = () => {
     );
 };
 
-export default KYCRequestsPage;
+export default Page;

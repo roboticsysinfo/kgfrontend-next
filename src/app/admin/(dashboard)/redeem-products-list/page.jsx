@@ -1,37 +1,44 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
 import {
-  deleteCustomerRedeemProduct,
-  fetchCustomerRedeemProducts,
-  updateCustomerRedeemProduct,
-} from '../../../redux/slices/customerRedeemProductSlice';
+  deleteRedeemProduct,
+  fetchRedeemProducts,
+  updateRedeemProduct,
+} from '@/redux/slices/redeemProductSlice';
+import toast from 'react-hot-toast';
 
-Modal.setAppElement('#root'); // for accessibility
 
-const CustomerProductsList = () => {
+// Optional: Can also use Modal.setAppElement('body'); if necessary
+// Modal.setAppElement('body');
+
+
+const Page = () => {
+
+  
   const dispatch = useDispatch();
-  const { rcproducts, loading } = useSelector((state) => state.customerRedeemProducts);
+  const { products, loading } = useSelector((state) => state.redeemProducts);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     requiredPoints: '',
-    price_value: '',           // ✅ added
-    rc_product_img: null,
+    price_value: '',
+    r_product_img: null,
   });
 
   useEffect(() => {
-    dispatch(fetchCustomerRedeemProducts());
+    dispatch(fetchRedeemProducts());
   }, [dispatch]);
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure?')) {
-      dispatch(deleteCustomerRedeemProduct(id));
-      toast.success("Product Deleted Successfully");
+      dispatch(deleteRedeemProduct(id));
+      toast.success('Product Deleted Successfully');
     }
   };
 
@@ -40,8 +47,8 @@ const CustomerProductsList = () => {
     setFormData({
       name: product.name,
       requiredPoints: product.requiredPoints,
-      price_value: product.price_value || "", // ✅ pre-fill price
-      rc_product_img: null,
+      price_value: product.price_value || '',
+      r_product_img: null,
     });
     setIsModalOpen(true);
   };
@@ -53,8 +60,8 @@ const CustomerProductsList = () => {
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'rc_product_img') {
-      setFormData((prev) => ({ ...prev, rc_product_img: files[0] }));
+    if (name === 'r_product_img') {
+      setFormData((prev) => ({ ...prev, r_product_img: files[0] }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
@@ -65,28 +72,24 @@ const CustomerProductsList = () => {
     const updateData = new FormData();
     updateData.append('name', formData.name);
     updateData.append('requiredPoints', formData.requiredPoints);
-    updateData.append('price_value', formData.price_value); // ✅ added
-    if (formData.rc_product_img) {
-      updateData.append('rc_product_img', formData.rc_product_img);
+    updateData.append('price_value', formData.price_value);
+    if (formData.r_product_img) {
+      updateData.append('r_product_img', formData.r_product_img);
     }
 
-    dispatch(updateCustomerRedeemProduct({ id: selectedProduct._id, formData: updateData }));
+    dispatch(updateRedeemProduct({ id: selectedProduct._id, formData: updateData }));
     closeModal();
-    toast.success("Product Updated Successfully");
+    toast.success('Product Updated Successfully');
   };
 
   const columns = [
     {
-      name: "Image",
+      name: 'Image',
       selector: (row) =>
-        row.rc_product_img ? (
-          <img
-            src={row.rc_product_img}
-            alt={row.name}
-            width="50"
-          />
+        row.r_product_img ? (
+          <img src={row.r_product_img} alt={row.name} width="50" />
         ) : (
-          "No Image"
+          'No Image'
         ),
     },
     {
@@ -100,40 +103,42 @@ const CustomerProductsList = () => {
       sortable: true,
     },
     {
-      name: 'Price Value (₹)', // ✅ new column
-      selector: (row) => row.price_value ? `₹${row.price_value}` : '—',
+      name: 'Price Value (₹)',
+      selector: (row) => (row.price_value ? `₹${row.price_value}` : '—'),
       sortable: true,
     },
     {
       name: 'Actions',
       cell: (row) => (
         <>
-          <button className="btn btn-sm btn-primary" onClick={() => openEditModal(row)} style={{ marginRight: 10 }}>
+          <button
+            className="btn btn-sm btn-primary"
+            onClick={() => openEditModal(row)}
+            style={{ marginRight: 10 }}
+          >
             Edit
           </button>
-          <button className='btn btn-sm btn-danger' onClick={() => handleDelete(row._id)}>Delete</button>
+          <button className="btn btn-sm btn-danger" onClick={() => handleDelete(row._id)}>
+            Delete
+          </button>
         </>
       ),
     },
   ];
 
   return (
-    <div className='p-4'>
+    <div className="p-4">
       <h3>Redeem Product List</h3>
       <hr />
-      <DataTable
-        columns={columns}
-        data={rcproducts}
-        progressPending={loading}
-        pagination
-      />
+      <DataTable columns={columns} data={products} progressPending={loading} pagination />
 
       <Modal isOpen={isModalOpen} onRequestClose={closeModal} contentLabel="Edit Product">
         <h2>Edit Product</h2>
-        <form onSubmit={handleUpdate} encType="multipart/form-data">
+        <form onSubmit={handleUpdate}>
           <div>
-            <label>Name:</label>
+            <label htmlFor="name">Name:</label>
             <input
+              id="name"
               type="text"
               name="name"
               value={formData.name}
@@ -141,10 +146,10 @@ const CustomerProductsList = () => {
               required
             />
           </div>
-
           <div>
-            <label>Required Points:</label>
+            <label htmlFor="requiredPoints">Required Points:</label>
             <input
+              id="requiredPoints"
               type="number"
               name="requiredPoints"
               value={formData.requiredPoints}
@@ -152,10 +157,10 @@ const CustomerProductsList = () => {
               required
             />
           </div>
-
           <div>
-            <label>Price Value (INR):</label>
+            <label htmlFor="price_value">Price Value (INR):</label>
             <input
+              id="price_value"
               type="number"
               name="price_value"
               value={formData.price_value}
@@ -163,25 +168,36 @@ const CustomerProductsList = () => {
               required
             />
           </div>
-
           <div>
-            <label>Product Image:</label>
+            <label htmlFor="r_product_img">Image:</label>
             <input
+              id="r_product_img"
               type="file"
-              name="rc_product_img"
+              name="r_product_img"
               accept="image/*"
               onChange={handleInputChange}
             />
           </div>
-
-          <button type="submit">Update</button>
-          <button onClick={closeModal} type="button" style={{ marginLeft: 10 }}>
-            Cancel
-          </button>
+          {formData.r_product_img && typeof formData.r_product_img === 'object' && (
+            <div style={{ marginTop: '10px' }}>
+              <p>Selected Image Preview:</p>
+              <img
+                src={URL.createObjectURL(formData.r_product_img)}
+                alt="Preview"
+                width={100}
+              />
+            </div>
+          )}
+          <div style={{ marginTop: '20px' }}>
+            <button type="submit">Update</button>
+            <button onClick={closeModal} type="button" style={{ marginLeft: 10 }}>
+              Cancel
+            </button>
+          </div>
         </form>
       </Modal>
     </div>
   );
 };
 
-export default CustomerProductsList;
+export default Page;

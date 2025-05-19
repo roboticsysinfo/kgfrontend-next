@@ -1,14 +1,16 @@
+"use client"
 import React from 'react'
 import { Col, Nav, Row, Tab } from 'react-bootstrap'
-import AboutForm from '../../components/admin/AboutForm'
-import SiteLogoForm from '../../components/admin/SiteLogoForm'
-import ContactForm from '../../components/admin/ContactForm'
-import SocialMediaForm from '../../components/admin/SocialMediaForm'
-import BannerForm from '../../components/admin/BannerForm'
-import AddPrivacyPolicy from '../../components/admin/AddPrivacyPolicy'
-import AddTermsCondition from '../../components/admin/AddTermsCondition'
+import AboutForm from '@/components/admin/AboutForm'
+import SiteLogoForm from '@/components/admin/SiteLogoForm'
+import ContactForm from '@/components/admin/ContactForm'
+import SocialMediaForm from '@/components/admin/SocialMediaForm'
+import BannerForm from '@/components/admin/BannerForm'
+import AddPrivacyPolicy from '@/components/admin/AddPrivacyPolicy'
+import AddTermsCondition from '@/components/admin/AddTermsCondition'
 
 const SiteSettings = () => {
+
     return (
         <>
 

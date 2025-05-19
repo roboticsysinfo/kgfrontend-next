@@ -1,11 +1,12 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBlogs, deleteBlog } from "../../redux/slices/blogSlice";
+import { fetchBlogs, deleteBlog } from "@/redux/slices/blogSlice";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
-const BlogsList = ({ onEdit }) => {
+const Page = ({ onEdit }) => {
     const dispatch = useDispatch();
     const { blogs, totalPages, currentPage, blogloading, loading, error } = useSelector((state) => state.blogs);
     const [page, setPage] = useState(1);
@@ -89,4 +90,4 @@ const BlogsList = ({ onEdit }) => {
     );
 };
 
-export default BlogsList;
+export default Page;

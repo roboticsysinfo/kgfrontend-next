@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
@@ -7,9 +8,9 @@ import {
   createAdminMessage,
   updateAdminMessage,
   deleteAdminMessage,
-} from "../../../redux/slices/adminMessageSlice";
+} from "@/redux/slices/adminMessageSlice";
 
-const MessagesList = () => {
+const Page = () => {
   const dispatch = useDispatch();
   const { messages, status } = useSelector((state) => state.adminMessages);
 
@@ -175,4 +176,4 @@ const MessagesList = () => {
   );
 };
 
-export default MessagesList;
+export default Page;

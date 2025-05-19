@@ -1,14 +1,15 @@
+"use client"
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { approveOrderRequest, getFarmerRequests } from "../../../redux/slices/requestOrderSlice"; // Adjust path as needed
+import { approveOrderRequest, getFarmerRequests } from "@/redux/slices/requestOrderSlice"; // Adjust path as needed
 
-const OrderRequests = () => {
+const Page = () => {
+
   const dispatch = useDispatch();
 
   // Get orders and loading/error states from Redux
   const { requests: orders, loading, error } = useSelector((state) => state.requestOrder);
-
 
 
   const handleAccepted = (orderId) => {
@@ -16,6 +17,7 @@ const OrderRequests = () => {
       dispatch(approveOrderRequest(orderId));
     }
   };
+
 
   // Fetch orders when the component mounts
   useEffect(() => {
@@ -85,4 +87,4 @@ const OrderRequests = () => {
   );
 };
 
-export default OrderRequests;
+export default Page;
