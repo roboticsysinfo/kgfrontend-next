@@ -3,16 +3,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { useSearchParams } from "next/navigation";
 import { FaShare, FaDownload } from "react-icons/fa";
 import { fetchCustomerReferralDetails } from "@/redux/slices/customerSlice";
-
 import { Container, Row, Col, Card } from "react-bootstrap";
+import { useParams } from "next/navigation"; // ✅ useParams import
 
 const Page = () => {
   const dispatch = useDispatch();
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
+  const params = useParams(); // ✅
+  const id = params?.id; // ✅ /customer/referral-details/[id]
 
   const { referralDetails, loading, error } = useSelector((state) => state.customer);
 

@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert, Spinner } from 'react-bootstrap';
 import { FaCalendar, FaCoins } from 'react-icons/fa6';
-import { fetchCustomerById, fetchPage } from '@/redux/slices/customerSlice';
+import { fetchCustomerById, fetchCustomerPointsTransactions } from '@/redux/slices/customerSlice';
 import { useParams } from 'next/navigation';
 
 const borderColors = {
@@ -47,7 +47,7 @@ const Page = () => {
   useEffect(() => {
     if (customerId) {
       dispatch(fetchCustomerById(customerId));
-      dispatch(fetchPage(customerId));
+      dispatch(fetchCustomerPointsTransactions(customerId));
     }
   }, [dispatch, customerId]);
 
