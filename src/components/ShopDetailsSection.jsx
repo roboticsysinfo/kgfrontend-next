@@ -174,7 +174,7 @@ const ShopDetailsScreen = () => {
 
                             </div>
 
-                            <div class="shop_about_section">
+                            <div className="shop_about_section">
                                 <h4 className=''>About Us</h4>
                                 <hr />
                                 <p>
@@ -238,7 +238,7 @@ const ShopDetailsScreen = () => {
                                                             by {product.shop_id?.shop_name}
                                                         </span>
                                                         <div className="product-card__price mt-16 mb-30">
-                                                            <span class="mb-[6px] text-[#191919] text-base font-medium font-['Poppins'] leading-normal">
+                                                            <span className="mb-[6px] text-[#191919] text-base font-medium font-['Poppins'] leading-normal">
                                                                 Rs{product.price_per_unit}
                                                             </span>
 

@@ -193,11 +193,14 @@ const FooterOne = () => {
 
 
                         <ul className="flex-align gap-16">
+
                             {siteDetails?.socialMedia?.map((item, index) => {
+
                                 const platform = item.platform?.toLowerCase();
 
                                 // Map platform to Phosphor icon class
                                 const iconMap = {
+                                    facebook: "ph-facebook-logo",
                                     instagram: "ph-instagram-logo",
                                     twitter: "ph-twitter-logo", // or "ph-x-logo" if you use X icon
                                     youtube: "ph-youtube-logo",

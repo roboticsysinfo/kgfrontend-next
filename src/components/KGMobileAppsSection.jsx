@@ -33,7 +33,7 @@ const KGMobileAppsSection = () => {
 
                     <hr />
 
-                    <div class="row">
+                    <div className="row">
                         <div className='kissan-growth-farmer-info'>
 
                             <h3 className='text-4xl'>Kissan Growth Farmer App: Empowering India’s Farmers</h3>
@@ -74,7 +74,7 @@ const KGMobileAppsSection = () => {
                     </div>
 
 
-                    <div class="kissan-growth-farmer-info">
+                    <div className="kissan-growth-farmer-info">
 
                         <h3 className='text-4xl'>For Farmers – Kissan Growth Farmer App</h3>
 
