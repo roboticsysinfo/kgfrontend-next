@@ -77,7 +77,7 @@ const HeaderSearch = () => {
                                                     key={product._id}
                                                 >
                                                     <img
-                                                        src={`${process.env.NEXT_PUBLIC_BASE_URL_PRIMARY}${product.product_image}`}
+                                                        src={product.product_image}
                                                         width={32}
                                                         height={32}
                                                         alt={product.name}
@@ -102,7 +102,7 @@ const HeaderSearch = () => {
                                                     key={shop._id}
                                                 >
                                                     <img
-                                                        src={`${process.env.NEXT_PUBLIC_BASE_URL_PRIMARY}${shop.shop_profile_image}`}
+                                                        src={shop.shop_profile_image}
                                                         width={32}
                                                         height={32}
                                                         alt={shop.shop_name}
