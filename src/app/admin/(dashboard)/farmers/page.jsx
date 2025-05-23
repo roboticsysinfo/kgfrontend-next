@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchFarmers } from '@/redux/slices/farmerSlice';
 import DataTable from 'react-data-table-component';
 import { useRouter } from 'next/navigation';
+import moment from 'moment';
 
 const page = () => {
-  
+
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -65,6 +66,13 @@ const page = () => {
       sortable: true,
     },
     {
+      name: 'Join Date',
+      selector: (row) => row.createdAt,
+      sortable: true,
+      format: (row) => moment(row.createdAt).format('DD MMM YYYY, hh:mm A'),
+      // Example: 23 May 2025, 04:15 PM
+    },
+    {
       name: 'Referred List',
       cell: (row) => (
         <button
@@ -78,7 +86,7 @@ const page = () => {
       button: true,
     },
   ];
-  
+
 
 
   return (
@@ -87,7 +95,7 @@ const page = () => {
       <div className='row'>
 
         <div className="col-lg-6">
-            <h2>All Farmers List</h2>
+          <h2>All Farmers List</h2>
         </div>
 
         <div className='col-lg-6'>

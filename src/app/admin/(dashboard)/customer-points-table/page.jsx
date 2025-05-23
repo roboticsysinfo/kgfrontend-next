@@ -45,7 +45,7 @@ const CustomerPointsTable = () => {
             selector: (row) =>
                 row.profile_image ? (
                     <img
-                        src={`${process.env.REACT_APP_BASE_URL_PRIMARY}/${row.profile_image}`}
+                        src={row.profile_image}
                         alt={row.name}
                         width={50}
                         height={50}
@@ -102,7 +102,6 @@ const CustomerPointsTable = () => {
         },
 
     ];
-
 
     return (
         <div className="px-5">

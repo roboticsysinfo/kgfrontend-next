@@ -1,14 +1,16 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFarmers } from '../../../redux/slices/farmerSlice';
+import { fetchFarmers } from '@/redux/slices/farmerSlice';
 import DataTable from 'react-data-table-component';
 import { Spinner } from 'react-bootstrap';
 import { FaCoins } from 'react-icons/fa'; // For coin icon
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+
 
 const FarmerPointsTable = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const router = useRouter();
     const { farmers, loading, error } = useSelector((state) => state.farmers);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -92,7 +94,7 @@ const FarmerPointsTable = () => {
             cell: (row) => (
                 <button
                     className="btn btn-sm btn-success"
-                    onClick={() => navigate(`/admin/points-transactions-list/${row._id}`)}
+                    onClick={() => router.push(`/admin/points-transactions-list/${row._id}`)}
                 >
                     View
                 </button>

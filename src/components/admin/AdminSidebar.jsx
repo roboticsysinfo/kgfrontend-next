@@ -8,7 +8,7 @@ const AdminSidebar = () => {
     <div className="bg-light vh-100 p-3" style={{ width: "250px" }}>
       <h5 className="mb-20">Navigation</h5>
       <Nav defaultActiveKey="/admin" className="flex-column">
-        <Link className="admin-accordion-button  nav-link" href="/admin/dashboard">Dashboard</Link>
+        <Link className="admin-accordion-button  nav-link" href="/admin">Dashboard</Link>
 
         <Link className="admin-accordion-button  nav-link" href="/admin/categories-list">Categories</Link>
 
@@ -37,8 +37,8 @@ const AdminSidebar = () => {
             <div id="collapse4" className="accordion-collapse collapse" data-bs-parent="#blogAccordion">
               <div className="accordion-body">
                 <Link className="btn-link text-info nav-link" href="/admin/farmer-plans-history">Farmer Plans</Link>
-                <Link className="btn-link text-dark nav-link" href="/admin/farmer-points-history">Farmer Points</Link>
-                <Link className="btn-link text-dark nav-link" href="/admin/customer-points-history">Customer Points</Link>
+                <Link className="btn-link text-dark nav-link" href="/admin/farmer-points-table">Farmer Points</Link>
+                <Link className="btn-link text-dark nav-link" href="/admin/customer-points-table">Customer Points</Link>
               </div>
             </div>
           </div>

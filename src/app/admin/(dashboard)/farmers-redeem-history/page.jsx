@@ -1,15 +1,18 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRedeemProductHistory } from '../../../redux/slices/redeemProductSlice';
+import { fetchRedeemProductHistory } from '@/redux/slices/redeemProductSlice';
 import Spinner from 'react-bootstrap/Spinner';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
 
 const FarmerRedeemHistory = () => {
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const router = useRouter();
     const { redemptionHistory, loading } = useSelector(state => state.redeemProducts);
 
     const [search, setSearch] = useState('');
@@ -67,7 +70,7 @@ const FarmerRedeemHistory = () => {
         {
             name: 'Invoice',
             cell: row => (
-                <Link to={`/admin/farmer-invoice-details/${row.orderId}`}>
+                <Link href={`/admin/farmer-invoice-details/${row.orderId}`}>
                     View Invoice
                 </Link>
             )

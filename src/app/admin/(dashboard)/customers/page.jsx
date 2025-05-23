@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllCustomers, deleteCustomer } from "@/redux/slices/customerSlice";
 import { useRouter } from "next/navigation";
+import moment from "moment";
 
 const Page = () => {
     const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const Page = () => {
             cell: (row) =>
                 row.profile_image ? (
                     <img
-                        src={`${process.env.NEXT_PUBLIC_BASE_URL_PRIMARY}/${row.profile_image}`}
+                        src={row.profile_image}
                         alt={row.name}
                         width={50}
                         height={50}
@@ -58,12 +59,19 @@ const Page = () => {
             selector: (row) => row.referralCode,
         },
         {
+            name: 'Join Date',
+            selector: (row) => row.createdAt,
+            sortable: true,
+            format: (row) => moment(row.createdAt).format('DD MMM YYYY, hh:mm A'),
+            // Example: 23 May 2025, 04:15 PM
+        },
+        {
             name: "Actions",
             cell: (row) => (
                 <div>
                     <button
                         className="btn btn-sm btn-primary me-2"
-                        onClick={() => router.push(`/admin/customer-referred-list/${row._id}`)}
+                        onClick={() => router.push(`/admin/customer-referral-list/${row._id}`)}
                     >
                         View Referred
                     </button>

@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import axiosInstance from "@/utils/axiosInstance";
 
 // Create a request order
@@ -7,7 +6,7 @@ export const createRequestOrder = createAsyncThunk(
   "requestOrder/createRequestOrder",
   async (orderData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URI}/request-order`, orderData, {
+      const response = await axiosInstance.post(`/request-order`, orderData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -19,16 +18,12 @@ export const createRequestOrder = createAsyncThunk(
   }
 );
 
-// Fetch all farmer requests (Admin feature)
+// Fetch all farmer requests order request(Admin feature)
 export const getFarmerRequests = createAsyncThunk(
   "requestOrder/getFarmerRequests",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/order-requests`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axiosInstance.get(`/order-requests`, { });
 
       return response.data.requests;
     } catch (error) {
@@ -40,23 +35,15 @@ export const getFarmerRequests = createAsyncThunk(
 // Fetch specific farmer's orders
 export const getOrderRequestByFarmerId = createAsyncThunk(
   "requestOrder/getOrderRequestByFarmerId",
-  async (_, { rejectWithValue }) => {
+  async (farmerId, { rejectWithValue }) => {
     try {
-
-      const farmerId = localStorage.getItem("farmerId"); // ✅ No need to parse, it's a string
-
-
       if (!farmerId) {
         return rejectWithValue("Farmer ID not found");
       }
 
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URI}/order-requests/farmer/${farmerId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+      const response = await axiosInstance.get(
+        `/order-requests/farmer/${farmerId}`,
+        {}
       );
 
       return response.data.requests;
@@ -76,7 +63,7 @@ export const approveOrderRequest = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        
+
       });
 
 
@@ -216,7 +203,7 @@ const requestOrderSlice = createSlice({
         state.error = action.payload;
       });
 
-},
+  },
 });
 
 export const { clearMessages } = requestOrderSlice.actions;

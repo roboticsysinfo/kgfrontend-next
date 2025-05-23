@@ -1,7 +1,8 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
-import { fetchHelpSupportTickets } from "../../../redux/slices/adminSlice"; // adjust path
+import { fetchHelpSupportTickets } from "@/redux/slices/adminSlice"; // adjust path
 
 const HelpSupportQuery = () => {
 
