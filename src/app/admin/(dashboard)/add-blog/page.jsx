@@ -1,21 +1,17 @@
-"use client"
-import React, { useState, useEffect, Suspense } from "react";
-import { Form, Button } from "react-bootstrap";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createBlog } from "@/redux/slices/blogSlice";
 import { fetchBlogCategories } from "@/redux/slices/blogCategorySlice";
-import Resizer from "react-image-file-resizer"; // ✅ Import Resizer
+import Resizer from "react-image-file-resizer";
 import "react-quill/dist/quill.snow.css";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
-const ReactQuill = dynamic(() => import("react-quill"), {
-  ssr: false, // ✅ disables server-side rendering for this component
-});
 const Page = ({ initialData = {} }) => {
-
-
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -34,19 +30,27 @@ const Page = ({ initialData = {} }) => {
   });
 
   const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null); // ✅ For preview
+  const [preview, setPreview] = useState(null);
+  const [showQuill, setShowQuill] = useState(false); // <-- Lazy load ReactQuill
 
   useEffect(() => {
     dispatch(fetchBlogCategories());
+
+    // Delay ReactQuill render to avoid findDOMNode error
+    const timer = setTimeout(() => {
+      setShowQuill(true);
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleQuillChange = (value) => {
-    setFormData({ ...formData, blog_content: value });
+    setFormData((prev) => ({ ...prev, blog_content: value }));
   };
 
   const handleImageChange = (e) => {
@@ -54,16 +58,16 @@ const Page = ({ initialData = {} }) => {
     if (file) {
       Resizer.imageFileResizer(
         file,
-        1200, // max width
-        620, // max height
+        1200,
+        620,
         "jpeg",
-        80, // quality
+        80,
         0,
         (resizedImage) => {
           setImage(resizedImage);
-          setPreview(URL.createObjectURL(resizedImage)); // ✅ Set preview
+          setPreview(URL.createObjectURL(resizedImage));
         },
-        "file" // output type
+        "file"
       );
     }
   };
@@ -74,6 +78,7 @@ const Page = ({ initialData = {} }) => {
 
     Object.keys(formData).forEach((key) => {
       if (key === "metaKeywords") {
+        // Append metaKeywords as array
         blogData.append(key, formData[key].split(",").map((item) => item.trim()));
       } else {
         blogData.append(key, formData[key]);
@@ -94,91 +99,124 @@ const Page = ({ initialData = {} }) => {
 
   const modules = {
     toolbar: [
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ script: 'sub' }, { script: 'super' }],
-      [{ indent: '-1' }, { indent: '+1' }],
-      [{ direction: 'rtl' }],
-      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
       [{ color: [] }, { background: [] }],
-      [{ font: [] }],
-      [{ align: [] }],
-      ['link', 'image', 'video'],
-      ['clean']
-    ]
+      ["link", "image", "video"],
+      ["clean"],
+    ],
   };
 
   return (
-    <Form onSubmit={handleSubmit} className="p-40 border rounded">
-      <Form.Group controlId="blog_title">
-        <Form.Label>Blog Title</Form.Label>
-        <Form.Control type="text" name="blog_title" value={formData.blog_title} onChange={handleChange} required />
-      </Form.Group>
+    <form onSubmit={handleSubmit} className="p-4 border rounded">
+      <div className="mb-3">
+        <label htmlFor="blog_title" className="form-label">Blog Title</label>
+        <input
+          type="text"
+          className="form-control"
+          id="blog_title"
+          name="blog_title"
+          value={formData.blog_title}
+          onChange={handleChange}
+          required
+        />
+      </div>
 
-      <Form.Group controlId="blog_category" className="mt-20">
-        <Form.Label>Category</Form.Label>
-        <Form.Control as="select" name="blog_category" value={formData.blog_category} onChange={handleChange} required>
+      <div className="mb-3">
+        <label htmlFor="blog_category" className="form-label">Category</label>
+        <select
+          className="form-control"
+          id="blog_category"
+          name="blog_category"
+          value={formData.blog_category}
+          onChange={handleChange}
+          required
+        >
           <option value="">Select Category</option>
           {categoryLoading ? (
-            <option>Loading categories...</option>
+            <option>Loading...</option>
           ) : (
-            
-              blogcategories.map((category) => (
-                <option key={category._id} value={category._id}>{category.Blog_category_name}</option>
-              ))
-            
-
+            blogcategories.map((cat) => (
+              <option key={cat._id} value={cat._id}>
+                {cat.Blog_category_name}
+              </option>
+            ))
           )}
-        </Form.Control>
-      </Form.Group>
+        </select>
+      </div>
 
-      <Form.Group controlId="blog_image" className="mt-20">
-        <Form.Label>Blog Image</Form.Label>
-        <Form.Control type="file" onChange={handleImageChange} accept="image/*" />
+      <div className="mb-3">
+        <label htmlFor="blog_image" className="form-label">Blog Image</label>
+        <input type="file" className="form-control" onChange={handleImageChange} accept="image/*" />
         {preview && <img src={preview} alt="Preview" height="150" className="mt-2" />}
-      </Form.Group>
+      </div>
 
-      <Form.Group controlId="imageAltText" className="mt-20">
-        <Form.Label>Image Alt Text</Form.Label>
-        <Form.Control type="text" name="imageAltText" value={formData.imageAltText} onChange={handleChange} />
-      </Form.Group>
-
-      <Form.Group controlId="metaTitle" className="mt-20">
-        <Form.Label>Meta Title</Form.Label>
-        <Form.Control type="text" name="metaTitle" value={formData.metaTitle} onChange={handleChange} />
-      </Form.Group>
-
-      <Form.Group controlId="metaDescription" className="mt-20">
-        <Form.Label>Meta Description</Form.Label>
-        <Form.Control type="text" name="metaDescription" value={formData.metaDescription} onChange={handleChange} />
-      </Form.Group>
-
-      <Form.Group controlId="metaKeywords" className="mt-20">
-        <Form.Label>Meta Keywords (comma-separated)</Form.Label>
-        <Form.Control type="text" name="metaKeywords" value={formData.metaKeywords} onChange={handleChange} />
-      </Form.Group>
-
-      <Form.Group controlId="blogContent" className="mt-20">
-        <Form.Label>Content</Form.Label>
-        <ReactQuill
-          value={formData.blog_content}
-          onChange={handleQuillChange}
-          theme="snow"
-          style={{ height: "500px" }}
-          modules={modules}
+      <div className="mb-3">
+        <label htmlFor="imageAltText" className="form-label">Image Alt Text</label>
+        <input
+          type="text"
+          className="form-control"
+          name="imageAltText"
+          value={formData.imageAltText}
+          onChange={handleChange}
         />
-      </Form.Group>
+      </div>
 
+      <div className="mb-3">
+        <label htmlFor="metaTitle" className="form-label">Meta Title</label>
+        <input
+          type="text"
+          className="form-control"
+          name="metaTitle"
+          value={formData.metaTitle}
+          onChange={handleChange}
+        />
+      </div>
 
-      <hr />
+      <div className="mb-3">
+        <label htmlFor="metaDescription" className="form-label">Meta Description</label>
+        <input
+          type="text"
+          className="form-control"
+          name="metaDescription"
+          value={formData.metaDescription}
+          onChange={handleChange}
+        />
+      </div>
 
-      {error && <p className="text-danger mt-2">{error}</p>}
+      <div className="mb-3">
+        <label htmlFor="metaKeywords" className="form-label">Meta Keywords (comma separated)</label>
+        <input
+          type="text"
+          className="form-control"
+          name="metaKeywords"
+          value={formData.metaKeywords}
+          onChange={handleChange}
+        />
+      </div>
 
-      <Button variant="success" type="submit" className="mt-20" disabled={loading}>
+      <div className="mb-3">
+        <label className="form-label">Blog Content</label>
+        {showQuill ? (
+          <ReactQuill
+            value={formData.blog_content}
+            onChange={handleQuillChange}
+            theme="snow"
+            modules={modules}
+            style={{ height: "300px" }}
+          />
+        ) : (
+          <div>Loading editor...</div>
+        )}
+      </div>
+
+      {error && <div className="text-danger mb-3">{error}</div>}
+
+      <button type="submit" className="btn btn-success" disabled={loading}>
         {loading ? "Adding..." : "Add Blog"}
-      </Button>
-    </Form>
+      </button>
+    </form>
   );
 };
 

@@ -28,6 +28,7 @@ const HeaderOne = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+
     const userId = localStorage.getItem('userId');
     if (userId) {
       dispatch(fetchNotifications());
@@ -259,7 +260,7 @@ const HeaderOne = () => {
 
               <li className="border-right-item">
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.yourapp.farmer"
+                  href="https://play.google.com/store/apps/details?id=com.kissangrowthfarmer"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -273,7 +274,7 @@ const HeaderOne = () => {
 
               <li>
                 <a
-                  href="https://play.google.com/store/apps/details?id=com.yourapp.farmer"
+                  href="https://play.google.com/store/apps/details?id=com.kissangrowthcustomer"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

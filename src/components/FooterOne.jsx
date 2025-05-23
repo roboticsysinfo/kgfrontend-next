@@ -173,14 +173,14 @@ const FooterOne = () => {
                             <h6 className="">Download Kissan Growth Apps</h6>
                             <p className="mb-16">Get it on Play Store Now</p>
                             <div className="flex-align gap-8 my-32">
-                                <Link href="/https://www.apple.com/store" className="appcontent">
+                                <a href="https://play.google.com/store/apps/details?id=com.kissangrowthfarmer" className="appcontent">
                                     <img src="/assets/images/google-play-store.svg" alt="Farmer App" />
                                     <p>Download App for Farmer</p>
-                                </Link>
-                                <Link href="/https://play.google.com/store/apps?hl=en" className="appcontent">
+                                </a>
+                                <a href="https://play.google.com/store/apps/details?id=com.kissangrowthcustomer" className="appcontent">
                                     <img src="/assets/images/google-play-store.svg" alt="Customer App" />
                                     <p>Download App for Customer</p>
-                                </Link>
+                                </a>
                             </div>
 
                         </div>

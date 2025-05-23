@@ -1,9 +1,10 @@
 "use client";
+import { useEffect } from "react";
 import OptimizedImage from "@/components/OptimizedImage";
 import RecentBlogs from "./RecentBlogs";
 import DOMPurify from "isomorphic-dompurify";
+import axiosInstance from "@/utils/axiosInstance";
 
-// Fix common invalid HTML nesting (optional)
 const fixInvalidNesting = (html) => {
     return html
         .replace(/<p[^>]*>(\s*)<div/gi, "<div")
@@ -14,6 +15,28 @@ const BlogDetail = ({ blog }) => {
     if (!blog || !blog.data) return null;
 
     const blogData = blog.data;
+
+    // Client side view count increment
+    useEffect(() => {
+        if (!blogData._id) return;
+
+        const viewedBlogs = JSON.parse(localStorage.getItem("viewedBlogs") || "[]");
+
+        if (!viewedBlogs.includes(blogData._id)) {
+            axiosInstance
+                .put(`/blog/view/${blogData._id}`)
+                .then(() => {
+                    // एक बार view बढ़ने के बाद localStorage में ID स्टोर करो ताकि बार-बार ना बढ़े
+                    localStorage.setItem(
+                        "viewedBlogs",
+                        JSON.stringify([...viewedBlogs, blogData._id])
+                    );
+                })
+                .catch((error) => {
+                    console.error("View count increase failed:", error);
+                });
+        }
+    }, [blogData._id]);
 
     const rawContent = blogData.blog_content || "<p>No content available</p>";
     const fixedHtml = fixInvalidNesting(rawContent);
@@ -77,7 +100,5 @@ const BlogDetail = ({ blog }) => {
         </section>
     );
 };
-
-
 
 export default BlogDetail;

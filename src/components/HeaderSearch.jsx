@@ -59,7 +59,9 @@ const HeaderSearch = () => {
                 </div>
 
                 {showResults && (
+
                     <div className="search-results">
+                        
                         {searchResults.products.length === 0 && searchResults.shops.length === 0 ? (
                             <p>No results found</p>
                         ) : (
