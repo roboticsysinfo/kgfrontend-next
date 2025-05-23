@@ -1,9 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import OptimizedImage from "@/components/OptimizedImage";
-import RecentBlogs from "./RecentBlogs";
+import RecentBlogs from "@/components/RecentBlogs";
 import DOMPurify from "isomorphic-dompurify";
 import axiosInstance from "@/utils/axiosInstance";
+
 
 const fixInvalidNesting = (html) => {
     return html
@@ -11,13 +12,16 @@ const fixInvalidNesting = (html) => {
         .replace(/<\/div>(\s*)<\/p>/gi, "</div>");
 };
 
-const BlogDetail = ({ blog }) => {
+
+const BlogDetails = ({ blog }) => {
+
     if (!blog || !blog.data) return null;
 
     const blogData = blog.data;
 
     // Client side view count increment
     useEffect(() => {
+
         if (!blogData._id) return;
 
         const viewedBlogs = JSON.parse(localStorage.getItem("viewedBlogs") || "[]");
@@ -26,7 +30,7 @@ const BlogDetail = ({ blog }) => {
             axiosInstance
                 .put(`/blog/view/${blogData._id}`)
                 .then(() => {
-                    // एक बार view बढ़ने के बाद localStorage में ID स्टोर करो ताकि बार-बार ना बढ़े
+                    
                     localStorage.setItem(
                         "viewedBlogs",
                         JSON.stringify([...viewedBlogs, blogData._id])
@@ -101,4 +105,4 @@ const BlogDetail = ({ blog }) => {
     );
 };
 
-export default BlogDetail;
+export default BlogDetails;

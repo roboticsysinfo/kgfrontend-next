@@ -1,4 +1,4 @@
-import BlogDetail from "@/components/BlogDetail";
+import BlogDetail from "@/components/BlogDetails";
 import Breadcrumb from "@/components/Breadcrumb";
 import ClientLayoutWrapper from "@/components/ClientLayoutWrapper";
 import api from "@/utils/api";
