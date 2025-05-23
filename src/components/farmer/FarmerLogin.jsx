@@ -43,7 +43,7 @@ const FarmerLogin = () => {
             Cookies.set('farmerName', response.data.farmer.name, { expires: 7 });
 
             toast.success('Login successful! Redirecting...');
-            router.push('/farmer-panel/farmer-dashboard');
+            router.push('/farmer-panel/dashboard');
         } catch (err) {
             const errorMessage = err.response?.data?.message || 'Login failed. Please try again.';
             toast.error(errorMessage);
