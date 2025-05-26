@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/axiosInstance";
+import api from "@/utils/api";
 
 // Create a request order
 export const createRequestOrder = createAsyncThunk(
@@ -60,12 +61,8 @@ export const approveOrderRequest = createAsyncThunk(
     try {
 
       const response = await axiosInstance.put(`/approve/${orderId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
 
       });
-
 
       return response.data;
     } catch (error) {
@@ -81,10 +78,7 @@ export const cancelOrderRequest = createAsyncThunk(
   async (orderId, { rejectWithValue }) => {
     try {
 
-      const response = await axios.put(`${process.env.NEXT_PUBLIC_API_URI}/cancel/${orderId}`, {}, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      const response = await axiosInstance.put(`/cancel/${orderId}`, {}, {
       });
 
       return response.data;
@@ -101,10 +95,7 @@ export const fetchCustomerOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
 
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URI}/my-orders`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+      const response = await axiosInstance.get(`/my-orders`, {
       });
 
       return response.data.orders;
