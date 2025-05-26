@@ -2,18 +2,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "react-data-table-component";
+import Cookies from "js-cookie"; // ✅ import Cookies
 import { fetchReviewsByCustomerId, deleteReview } from "@/redux/slices/reviewSlice";
 
 const MyReviews = () => {
   const dispatch = useDispatch();
   const { reviews, loading } = useSelector((state) => state.reviews);
-  const [customerId, setCustomerId] = useState(null); // new state
+  const [customerId, setCustomerId] = useState(null);
 
   useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      const user = JSON.parse(userData);
-      setCustomerId(user?.id);
+    const userCookie = Cookies.get("user"); // ✅ get cookie
+    if (userCookie) {
+      try {
+        const user = JSON.parse(userCookie);
+        setCustomerId(user?.id);
+      } catch (error) {
+        console.error("Invalid user cookie JSON:", error);
+      }
     }
   }, []);
 
@@ -53,10 +58,7 @@ const MyReviews = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <button
-          className="btn btn-danger"
-          onClick={() => handleDelete(row._id)}
-        >
+        <button className="btn btn-danger" onClick={() => handleDelete(row._id)}>
           Delete
         </button>
       ),

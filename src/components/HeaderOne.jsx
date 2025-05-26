@@ -12,14 +12,16 @@ import { fetchNotifications } from '@/redux/slices/notificationsSlice';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { deleteCookie, getCookie } from 'cookies-next';
 
 
 const HeaderOne = () => {
 
-  const router = useRouter();
 
+  const router = useRouter();
   const dispatch = useDispatch();
-  const unreadCount = useSelector(state => state.notifications.unreadCount);
+  const unreadCount = useSelector((state) => state.notifications.unreadCount);
+
   const [districtOptions, setDistrictOptions] = useState([]);
   const [scroll, setScroll] = useState(false);
   const [menuActive, setMenuActive] = useState(false);
@@ -27,45 +29,69 @@ const HeaderOne = () => {
   const [activeSearch, setActiveSearch] = useState(false);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  const userInfoString = getCookie("user");
+  let userInfo = null;
+  let userId = null;
 
-    const userId = localStorage.getItem('userId');
+  if (userInfoString) {
+    try {
+      userInfo = JSON.parse(userInfoString);
+      userId = userInfo?.id || userInfo?._id;  // user id किस फील्ड में है देखो
+      console.log("userinfo name", userInfo.name);
+      console.log("userid header", userId);
+    } catch (error) {
+      console.error("Error parsing user cookie:", error);
+    }
+  } else {
+    console.log("User cookie not found");
+  }
+
+
+
+  // Use effect to fetch notifications if userId exists in cookie
+  useEffect(() => {
+    const userId = getCookie("userId");
     if (userId) {
       dispatch(fetchNotifications());
     }
   }, [dispatch]);
 
+  // Use effect to track scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset < 150) {
-        setScroll(false);
-      } else if (window.pageYOffset > 150) {
-        setScroll(true);
-      }
+      setScroll(window.pageYOffset > 150);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    // Cleanup
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Use effect to get user info from cookie (or localStorage fallback)
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+    const userCookie = getCookie("user");
+    if (userCookie) {
+      try {
+        setUser(JSON.parse(userCookie));
+      } catch {
+        setUser(null);
       }
+    } else if (typeof window !== "undefined") {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) setUser(JSON.parse(storedUser));
     }
   }, []);
-  const userId = user?.id;
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('user');
-    toast.success('Logout Successfully');
-    router.push('/login');
+    deleteCookie("token");
+    deleteCookie("userRole");
+    deleteCookie("user");
+    deleteCookie("userId");
+
+    setUser(null); // clear local user state
+
+    toast.success("Logout Successfully");
+    router.push("/login");
   };
 
   const handleMenuClick = (index) => {
@@ -435,7 +461,7 @@ const HeaderOne = () => {
                     <Link href="/account" className="flex-align gap-4 item-hover">
                       <div className="profile_dropdown">
                         <img src="https://avatar.iran.liara.run/public/boy" alt="Username" width={38} height={38} />
-                        <h6>{user.name}</h6>
+                        <h6>{userInfo.name}</h6>
                       </div>
                     </Link>
 

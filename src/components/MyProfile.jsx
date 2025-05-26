@@ -5,14 +5,17 @@ import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomerById, updateCustomer } from "@/redux/slices/customerSlice";
 import axiosInstance from "@/utils/axiosInstance";
+import Cookies from "js-cookie";
 
 const MyProfile = () => {
+
   const dispatch = useDispatch();
   const { customer, loading } = useSelector((state) => state.customer);
 
   const [customerId, setCustomerId] = useState(null);
   const [statesAndCities, setStatesAndCities] = useState({});
   const [districts, setDistricts] = useState([]);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,19 +26,30 @@ const MyProfile = () => {
     profileImage: "https://avatar.iran.liara.run/public/boy",
   });
 
+  // ✅ Get customer ID from Cookies
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const user = JSON.parse(localStorage.getItem("user"));
-      setCustomerId(user?.id);
+    const userCookie = Cookies.get("user");
+
+    if (userCookie) {
+      try {
+        const user = JSON.parse(userCookie);
+        setCustomerId(user?.id);
+      } catch (error) {
+        console.error("Invalid user cookie JSON:", error);
+      }
     }
   }, []);
 
+
+  // ✅ Fetch customer by ID
   useEffect(() => {
     if (customerId) {
       dispatch(fetchCustomerById(customerId));
     }
   }, [dispatch, customerId]);
 
+
+  // ✅ Pre-fill form when customer is available
   useEffect(() => {
     if (customer) {
       setFormData({
@@ -54,6 +68,8 @@ const MyProfile = () => {
     }
   }, [customer, statesAndCities]);
 
+
+  // ✅ Load all states and cities
   useEffect(() => {
     const fetchStatesAndCities = async () => {
       try {
@@ -70,16 +86,20 @@ const MyProfile = () => {
     fetchStatesAndCities();
   }, []);
 
+
+  // ✅ Input change handlers
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
 
   const handleStateChange = (e) => {
     const selectedState = e.target.value;
     setFormData({ ...formData, state: selectedState, city: "" });
     setDistricts(statesAndCities[selectedState] || []);
   };
+
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -88,6 +108,7 @@ const MyProfile = () => {
       setFormData({ ...formData, profileImage: imageUrl });
     }
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,6 +122,7 @@ const MyProfile = () => {
       });
   };
 
+  
   return (
     <Card className="p-40">
       <h4 className="mb-4 text-start">My Profile</h4>

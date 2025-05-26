@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
@@ -10,11 +10,20 @@ import MyReviews from '@/components/MyReviews';
 import ManageOrder from '@/components/ManageOrder';
 import MyProfile from '@/components/MyProfile';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 
 const Account = () => {
 
     const router = useRouter()
+
+    useEffect(() => {
+        const token = Cookies.get('token'); // 👈 Get token from browser cookies
+
+        if (!token) {
+            router.push('/login');
+        }
+    }, []);
 
     return (
 
@@ -82,7 +91,7 @@ const Account = () => {
                                     </Tab.Content>
                                 </Col>
                             </Row>
-                            
+
                         </Tab.Container>
 
                     </ul>
