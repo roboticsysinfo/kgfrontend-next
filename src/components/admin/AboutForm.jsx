@@ -7,6 +7,7 @@ import toast from "react-hot-toast"
 
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import { fetchSiteDetails } from "@/redux/slices/siteDeatilsSlice"
 
 const AboutForm = () => {
   const dispatch = useDispatch()
