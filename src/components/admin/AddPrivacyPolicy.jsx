@@ -5,13 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Form, Button } from 'react-bootstrap'
 import { fetchSiteDetails, updatePrivacyPolicy } from '@/redux/slices/siteDeatilsSlice'
 import toast from 'react-hot-toast'
-import dynamic from 'next/dynamic'
 
-
-// ✅ Dynamically import ReactQuill (Client-side only)
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
-
-import 'react-quill/dist/quill.snow.css'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
 const AddPrivacyPolicy = () => {
   const dispatch = useDispatch()
@@ -19,17 +15,25 @@ const AddPrivacyPolicy = () => {
 
   const [privacyContent, setPrivacyContent] = useState('')
 
+  // Initialize tiptap editor
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: privacyContent || '',
+    onUpdate: ({ editor }) => {
+      setPrivacyContent(editor.getHTML())
+    },
+  })
+
   useEffect(() => {
     if (!siteDetails) {
       dispatch(fetchSiteDetails())
     } else if (siteDetails.privacyPolicy) {
       setPrivacyContent(siteDetails.privacyPolicy)
+      if (editor) {
+        editor.commands.setContent(siteDetails.privacyPolicy)
+      }
     }
-  }, [dispatch, siteDetails])
-
-  const handleContentChange = (value) => {
-    setPrivacyContent(value)
-  }
+  }, [dispatch, siteDetails, editor])
 
   const handlePrivacySubmit = async (e) => {
     e.preventDefault()
@@ -50,12 +54,9 @@ const AddPrivacyPolicy = () => {
       <Form onSubmit={handlePrivacySubmit}>
         <Form.Group controlId="privacyContent" className="mb-4">
           <Form.Label>Content</Form.Label>
-          <ReactQuill
-            value={privacyContent}
-            onChange={handleContentChange}
-            theme="snow"
-            style={{ height: '400px', marginBottom: '50px' }}
-          />
+          <div style={{ border: '1px solid #ced4da', borderRadius: '0.25rem', minHeight: 400, marginBottom: 50 }}>
+            <EditorContent editor={editor} />
+          </div>
         </Form.Group>
 
         <Form.Group>

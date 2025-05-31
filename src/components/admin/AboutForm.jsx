@@ -3,14 +3,10 @@
 import React, { useEffect, useState } from "react"
 import { Form, Button } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux"
-import dynamic from "next/dynamic"
-import { fetchSiteDetails, updateSiteAbout } from "@/redux/slices/siteDeatilsSlice"
 import toast from "react-hot-toast"
 
-// ✅ Dynamically import ReactQuill (No SSR)
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false })
-
-import "react-quill/dist/quill.snow.css"
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
 const AboutForm = () => {
   const dispatch = useDispatch()
@@ -24,10 +20,23 @@ const AboutForm = () => {
     footerContent: "",
   })
 
+  // Initialize tiptap editor
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: formsiteDetails.aboutContent || '',
+    onUpdate: ({ editor }) => {
+      setFormsiteDetails(prev => ({
+        ...prev,
+        aboutContent: editor.getHTML(),
+      }))
+    }
+  })
+
   useEffect(() => {
     dispatch(fetchSiteDetails())
   }, [dispatch])
 
+  // When siteDetails arrive, update form and editor content
   useEffect(() => {
     if (siteDetails?.about) {
       setFormsiteDetails({
@@ -35,18 +44,17 @@ const AboutForm = () => {
         aboutContent: siteDetails.about.content || "",
         footerContent: siteDetails.about.footer_text || "",
       })
+      if (editor && siteDetails.about.content) {
+        editor.commands.setContent(siteDetails.about.content)
+      }
     }
-  }, [siteDetails])
+  }, [siteDetails, editor])
 
   const handleChange = (e) => {
     setFormsiteDetails({
       ...formsiteDetails,
       [e.target.name]: e.target.value,
     })
-  }
-
-  const handleContentChange = (value) => {
-    setFormsiteDetails({ ...formsiteDetails, aboutContent: value })
   }
 
   const handleAboutSubmit = async (e) => {
@@ -78,12 +86,9 @@ const AboutForm = () => {
 
         <Form.Group controlId="aboutContent" className="mb-30">
           <Form.Label>Content</Form.Label>
-          <ReactQuill
-            value={formsiteDetails.aboutContent}
-            onChange={handleContentChange}
-            theme="snow"
-            style={{ height: "400px" }}
-          />
+          <div className="border rounded" style={{ minHeight: 400 }}>
+            <EditorContent editor={editor} />
+          </div>
         </Form.Group>
 
         <hr />

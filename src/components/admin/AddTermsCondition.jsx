@@ -5,12 +5,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Form, Button } from 'react-bootstrap'
 import { fetchSiteDetails, updateTermsAndConditions } from '@/redux/slices/siteDeatilsSlice'
 import toast from 'react-hot-toast'
-import dynamic from 'next/dynamic'
 
-// ✅ SSR disabled dynamic import for ReactQuill
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
-
-import 'react-quill/dist/quill.snow.css'
+import { useEditor, EditorContent } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
 
 const AddTermsCondition = () => {
   const dispatch = useDispatch()
@@ -18,17 +15,24 @@ const AddTermsCondition = () => {
 
   const [termsContent, setTermsContent] = useState('')
 
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: termsContent || '',
+    onUpdate: ({ editor }) => {
+      setTermsContent(editor.getHTML())
+    },
+  })
+
   useEffect(() => {
     if (!siteDetails) {
       dispatch(fetchSiteDetails())
     } else if (siteDetails.termsAndConditions) {
       setTermsContent(siteDetails.termsAndConditions)
+      if (editor) {
+        editor.commands.setContent(siteDetails.termsAndConditions)
+      }
     }
-  }, [dispatch, siteDetails])
-
-  const handleContentChange = (value) => {
-    setTermsContent(value)
-  }
+  }, [dispatch, siteDetails, editor])
 
   const handleTermsSubmit = async (e) => {
     e.preventDefault()
@@ -48,12 +52,16 @@ const AddTermsCondition = () => {
       <Form onSubmit={handleTermsSubmit}>
         <Form.Group controlId="termsContent" className="mb-4">
           <Form.Label>Content</Form.Label>
-          <ReactQuill
-            value={termsContent}
-            onChange={handleContentChange}
-            theme="snow"
-            style={{ height: '400px', marginBottom: '50px' }}
-          />
+          <div
+            style={{
+              border: '1px solid #ced4da',
+              borderRadius: '0.25rem',
+              minHeight: 400,
+              marginBottom: 50,
+            }}
+          >
+            <EditorContent editor={editor} />
+          </div>
         </Form.Group>
 
         <Form.Group>
