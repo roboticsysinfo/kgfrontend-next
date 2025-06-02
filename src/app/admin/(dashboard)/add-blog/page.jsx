@@ -65,6 +65,8 @@ export default function BlogFormPage({ initialData = {} }) {
     e.preventDefault();
     const blogData = new FormData();
 
+    console.log("blogData", blogData)
+
     Object.keys(formData).forEach((key) => {
       if (key === 'metaKeywords') {
         blogData.append(key, formData[key].split(',').map((k) => k.trim()));
@@ -78,6 +80,8 @@ export default function BlogFormPage({ initialData = {} }) {
     }
 
     const result = await dispatch(createBlog(blogData));
+
+    console.log("result", result)
 
     if (createBlog.fulfilled.match(result)) {
       alert('✅ Blog created!');

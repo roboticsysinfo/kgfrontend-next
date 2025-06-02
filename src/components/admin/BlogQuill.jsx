@@ -2,10 +2,23 @@ import React, { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 
 export default function BlogQuill({ value, onChange }) {
   const editor = useEditor({
-    extensions: [StarterKit, Image],
+    extensions: [
+      StarterKit,
+      Image,
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        linkOnPaste: true,
+        HTMLAttributes: {
+          rel: 'noopener noreferrer nofollow',
+          target: '_blank',
+        },
+      }),
+    ],
     content: value,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
@@ -48,12 +61,21 @@ export default function BlogQuill({ value, onChange }) {
         }
       }
 
-      // 2. Check for image URL (if no file found)
+      // 2. Check for image URL
       const text = clipboardData.getData('text/plain');
-      if (text && (text.startsWith('http') && (text.endsWith('.png') || text.endsWith('.jpg') || text.endsWith('.jpeg') || text.endsWith('.gif')))) {
+      if (
+        text &&
+        text.startsWith('http') &&
+        (text.endsWith('.png') ||
+          text.endsWith('.jpg') ||
+          text.endsWith('.jpeg') ||
+          text.endsWith('.gif'))
+      ) {
         event.preventDefault();
         editor.chain().focus().setImage({ src: text }).run();
       }
+
+      // 3. Let Tiptap handle links from Word HTML by default now
     };
 
     const dom = editor.view.dom;
