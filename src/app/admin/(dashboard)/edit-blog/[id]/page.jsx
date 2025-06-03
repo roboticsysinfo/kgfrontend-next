@@ -1,27 +1,37 @@
-import React, { useState, useEffect, Suspense } from "react";
+"use client";
+import React, { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { Form, Button } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { updateBlog, fetchBlogById } from "../../../redux/slices/blogSlice";
-import { fetchBlogCategories } from "../../../redux/slices/blogCategorySlice";
-import { useParams, useNavigate } from "react-router-dom";
 import Resizer from "react-image-file-resizer";
-import "react-quill/dist/quill.snow.css";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
 
-const ReactQuill = React.lazy(() => import("react-quill"));
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchBlogById,
+  updateBlog,
+} from "@/redux/slices/blogSlice"; // adjust path if needed
+import axiosInstance from "@/utils/axiosInstance";
 
 const EditBlog = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { id } = useParams(); // 👈 Blog ID from URL
+  const router = useRouter();
+  const params = useParams();
+  const id = params?.id;
 
-  const { blogDetails, blogloading, blogError } = useSelector((state) => state.blogs);
-  const { blogcategories } = useSelector((state) => state.blogCategory);
+  console.log("id", id)
+
+  const dispatch = useDispatch();
+
+  const { blogDetails, blogloading, blogError } = useSelector(
+    (state) => state.blogs
+  );
 
   const [formData, setFormData] = useState({
     blog_title: "",
     blog_content: "",
     blog_category: "",
-    blog_image: "",
     imageAltText: "",
     metaTitle: "",
     metaDescription: "",
@@ -30,37 +40,74 @@ const EditBlog = () => {
 
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [initialContent, setInitialContent] = useState("");
 
+  // Editor setup
+  const editor = useEditor({
+    extensions: [StarterKit, Link.configure({ openOnClick: false }), Image],
+    content: "",
+    onUpdate: ({ editor }) => {
+      const content = editor.getHTML();
+      setFormData((prev) => ({
+        ...prev,
+        blog_content: content,
+      }));
+    },
+  });
+
+  // Fetch blog data from Redux on mount
   useEffect(() => {
-    dispatch(fetchBlogCategories());
-    dispatch(fetchBlogById(id));
-  }, [dispatch, id]);
+    if (id) {
+      dispatch(fetchBlogById(id));
+    }
+  }, [id, dispatch]);
 
+  console.log("blog details", blogDetails)
+
+  // When blogDetails is loaded, prefill form
   useEffect(() => {
     if (blogDetails) {
       setFormData({
         blog_title: blogDetails.blog_title || "",
         blog_content: blogDetails.blog_content || "",
         blog_category: blogDetails.blog_category || "",
-        blog_image: blogDetails.blog_image || "",
         imageAltText: blogDetails.imageAltText || "",
         metaTitle: blogDetails.metaTitle || "",
         metaDescription: blogDetails.metaDescription || "",
-        metaKeywords: blogDetails.metaKeywords ? blogDetails.metaKeywords.join(", ") : "",
+        metaKeywords: blogDetails.metaKeywords?.join(", ") || "",
       });
+      setInitialContent(blogDetails.blog_content || "");
+
       if (blogDetails.blog_image) {
-        setPreview(blogDetails.blog_image); // Preload existing image
+        setPreview(blogDetails.blog_image);
       }
     }
   }, [blogDetails]);
 
+  // Set editor content separately
+  useEffect(() => {
+    if (editor && initialContent) {
+      editor.commands.setContent(initialContent);
+    }
+  }, [editor, initialContent]);
+
+  // Fetch categories (unchanged)
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axiosInstance.get("/blog-categories");
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleQuillChange = (value) => {
-    setFormData((prev) => ({ ...prev, blog_content: value }));
   };
 
   const handleImageChange = (e) => {
@@ -73,9 +120,9 @@ const EditBlog = () => {
         "jpeg",
         80,
         0,
-        (resizedImage) => {
-          setImage(resizedImage);
-          setPreview(URL.createObjectURL(resizedImage));
+        (resized) => {
+          setImage(resized);
+          setPreview(URL.createObjectURL(resized));
         },
         "file"
       );
@@ -88,7 +135,10 @@ const EditBlog = () => {
 
     Object.keys(formData).forEach((key) => {
       if (key === "metaKeywords") {
-        updatedFormData.append(key, formData[key].split(",").map((item) => item.trim()));
+        updatedFormData.append(
+          key,
+          JSON.stringify(formData[key].split(",").map((k) => k.trim()))
+        );
       } else {
         updatedFormData.append(key, formData[key]);
       }
@@ -98,28 +148,27 @@ const EditBlog = () => {
       updatedFormData.append("blog_image", image);
     }
 
-    const result = await dispatch(updateBlog({ id, formData: updatedFormData }));
-    if (updateBlog.fulfilled.match(result)) {
-      alert("Blog updated successfully!");
-      navigate("/admin/blogs-list");
-    }
-  };
+    try {
+      // Dispatch Redux updateBlog thunk
+      const resultAction = await dispatch(updateBlog({ id, formData: updatedFormData }));
 
-  const modules = {
-    toolbar: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image"],
-      ["clean"]
-    ]
+      if (updateBlog.fulfilled.match(resultAction)) {
+        alert("Blog updated successfully!");
+        router.push("/admin/blogs-list");
+      } else {
+        alert("Update failed: " + (resultAction.payload || "Unknown error"));
+      }
+    } catch (err) {
+      console.error("Update error:", err);
+      alert("Update failed due to server error.");
+    }
   };
 
   return (
     <Form onSubmit={handleSubmit} className="p-40 border rounded">
       <h3>Edit Blog</h3>
 
-      <Form.Group controlId="blog_title">
+      <Form.Group className="mt-30">
         <Form.Label>Blog Title</Form.Label>
         <Form.Control
           type="text"
@@ -130,31 +179,29 @@ const EditBlog = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="blog_category" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Category</Form.Label>
-        <Form.Control
-          as="select"
+        <Form.Select
           name="blog_category"
           value={formData.blog_category}
           onChange={handleChange}
-          required
         >
           <option value="">Select Category</option>
-          {blogcategories.map((category) => (
-            <option key={category._id} value={category._id}>
-              {category.Blog_category_name}
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.Blog_category_name}
             </option>
           ))}
-        </Form.Control>
+        </Form.Select>
       </Form.Group>
 
-      <Form.Group controlId="blog_image" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Blog Image</Form.Label>
-        <Form.Control type="file" onChange={handleImageChange} accept="image/*" />
+        <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
         {preview && <img src={preview} alt="Preview" height="150" className="mt-2" />}
       </Form.Group>
 
-      <Form.Group controlId="imageAltText" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Image Alt Text</Form.Label>
         <Form.Control
           type="text"
@@ -164,7 +211,7 @@ const EditBlog = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="metaTitle" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Meta Title</Form.Label>
         <Form.Control
           type="text"
@@ -174,7 +221,7 @@ const EditBlog = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="metaDescription" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Meta Description</Form.Label>
         <Form.Control
           type="text"
@@ -184,7 +231,7 @@ const EditBlog = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="metaKeywords" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Meta Keywords (comma-separated)</Form.Label>
         <Form.Control
           type="text"
@@ -194,22 +241,14 @@ const EditBlog = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="blogContent" className="mt-20">
+      <Form.Group className="mt-30">
         <Form.Label>Content</Form.Label>
-        <Suspense fallback={<div>Loading editor...</div>}>
-          <ReactQuill
-            value={formData.blog_content}
-            onChange={handleQuillChange}
-            theme="snow"
-            style={{ height: "400px" }}
-            modules={modules}
-          />
-        </Suspense>
+        <div className="tiptap-editor border p-2 rounded bg-white">
+          <EditorContent editor={editor} />
+        </div>
       </Form.Group>
 
-      {blogError && <p className="text-danger mt-2">{blogError}</p>}
-
-      <Button variant="primary" type="submit" className="mt-3" disabled={blogloading}>
+      <Button type="submit" className="mt-4" disabled={blogloading}>
         {blogloading ? "Updating..." : "Update Blog"}
       </Button>
     </Form>

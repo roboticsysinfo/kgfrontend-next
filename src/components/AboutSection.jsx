@@ -4,11 +4,13 @@ import Link from "next/link";
 import { fetchSiteDetailsSSR } from "@/utils/server/fetchSiteDetails";
 
 const AboutSection = async () => {
+
   const siteDetails = await fetchSiteDetailsSSR();
 
   if (!siteDetails) return <p>Failed to load site details</p>;
 
   return (
+    
     <div className="container my-60 py-40">
 
       <h1 style={styles.heading}>
