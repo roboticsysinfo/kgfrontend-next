@@ -51,7 +51,7 @@ const BlogCategory = () => {
       {/* Add Category Form */}
       <h2 className="text-xl font-semibold mb-20">Add Blog Category</h2>
       <hr />
-      <form onSubmit={handleSubmit} className="space-y-3 dflexinpugroup">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <div className="form-group mb-30">
           <label className="block text-sm font-medium">Category Name</label>
           <input
