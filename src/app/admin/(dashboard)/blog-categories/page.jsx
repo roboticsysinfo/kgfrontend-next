@@ -11,7 +11,6 @@ import {
 const BlogCategory = () => {
   const dispatch = useDispatch();
   const { blogcategories, loading } = useSelector((state) => state.blogCategory);
-
   const [categoryName, setCategoryName] = useState("");
 
   // Fetch categories on mount
