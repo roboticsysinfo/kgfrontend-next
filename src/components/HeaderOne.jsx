@@ -508,7 +508,7 @@ const HeaderOne = () => {
 
                   <div className="logo px-16 d-lg-none d-block">
                     <Link href="/" className="link">
-                      <img src="/assets/images/kg-logo.png" alt="Logo" />
+                      <img src="/assets/images/KGC.png" alt="Logo" />
                     </Link>
                   </div>
 
