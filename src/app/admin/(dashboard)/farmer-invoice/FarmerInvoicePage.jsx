@@ -80,7 +80,7 @@ const FarmerInvoicePage = () => {
 
                     <div className='company-details'>
                         {/* Title & Note */}
-                        <img src='/assets/images/kg-logo.png' alt="logo" width={100} height={100} />
+                        <img src='/assets/images/kg-logo.jpg' alt="logo" width={100} height={100} />
                         <h6 className="fw-bold mb-0">Kissan Growth</h6>
                         <p className="text-muted">India’s #1 Farm Online Marketplace!</p>
                     </div>
