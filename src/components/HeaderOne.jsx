@@ -147,7 +147,7 @@ const HeaderOne = () => {
         <div className="mobile-menu__inner">
 
           <Link href="/home" className="mobile-menu__logo">
-            <img src="/assets/images/KGC.png" alt="Logo" />
+            <img src="/assets/images/kg-logo.jpg" alt="Logo" />
           </Link>
 
           <div className="mobile-menu__menu">
@@ -362,7 +362,7 @@ const HeaderOne = () => {
             {/* Logo Start */}
             <div className="logo">
               <Link href="/" className="link">
-                <img src="/assets/images/KGC.png" alt="Logo" />
+                <img src="/assets/images/kg-logo.jpg" alt="Logo" />
               </Link>
             </div>
             {/* Logo End  */}
@@ -508,7 +508,7 @@ const HeaderOne = () => {
 
                   <div className="logo px-16 d-lg-none d-block">
                     <Link href="/" className="link">
-                      <img src="/assets/images/KGC.png" alt="Logo" />
+                      <img src="/assets/images/kg-logo.jpg" alt="Logo" />
                     </Link>
                   </div>
 

@@ -72,7 +72,7 @@ const Page = () => {
       <div ref={invoiceRef}>
         <div className="d-flex justify-content-between align-items-start mb-4">
           <div className="company-details">
-            <img src="/assets/images/KGC.png" alt="logo" width={100} height={100} />
+            <img src="/assets/images/kg-logo.jpg" alt="logo" width={100} height={100} />
             <h6 className="fw-bold mb-0">Kissan Growth</h6>
             <p className="text-muted">India’s #1 Farm Online Marketplace!</p>
           </div>
