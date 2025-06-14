@@ -147,7 +147,7 @@ const HeaderOne = () => {
         <div className="mobile-menu__inner">
 
           <Link href="/home" className="mobile-menu__logo">
-            <img src="/assets/images/kg-logo.png" alt="Logo" />
+            <img src="/assets/images/KGC.jpg" alt="Logo" />
           </Link>
 
           <div className="mobile-menu__menu">
