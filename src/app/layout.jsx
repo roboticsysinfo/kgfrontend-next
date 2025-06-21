@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* Facebook Pixel */}
+        {/* Facebook Meta Pixel - Updated */}
         <Script id="facebook-pixel" strategy="afterInteractive">
           {`
             !function(f,b,e,v,n,t,s)
@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '700766832672609');
+            fbq('init', '9930875950294753');
             fbq('track', 'PageView');
           `}
         </Script>
@@ -78,7 +78,7 @@ export default function RootLayout({ children }) {
             height="1"
             width="1"
             style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=700766832672609&ev=PageView&noscript=1"
+            src="https://www.facebook.com/tr?id=9930875950294753&ev=PageView&noscript=1"
             alt=""
           />
         </noscript>
