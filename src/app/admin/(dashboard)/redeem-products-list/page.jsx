@@ -18,12 +18,12 @@ import toast from 'react-hot-toast';
 
 const Page = () => {
 
-  
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.redeemProducts);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
   const [formData, setFormData] = useState({
     name: '',
     requiredPoints: '',

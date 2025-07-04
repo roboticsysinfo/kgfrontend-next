@@ -1,82 +1,99 @@
-// redux/farmersSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/utils/axiosInstance';
 
-
+// 🚜 Fetch All Farmers
 export const fetchFarmers = createAsyncThunk('farmers/fetchFarmers', async () => {
-  try {
-    const response = await axiosInstance.get('/farmers');
-    return response.data;
-  } catch (error) {
-    throw new Error(error.message);
-  }
+  const response = await axiosInstance.get('/farmers');
+  return response.data;
 });
 
+// ✅ Update Farmer by ID (with file support)
+export const updateFarmerById = createAsyncThunk(
+  'farmers/updateFarmerById',
+  async ({ farmerId, formData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(
+        `/farmer/update/${farmerId}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+      return response.data.farmer;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to update farmer');
+    }
+  }
+);
 
-
-// Get Farmer by ID (Separate state for farmer details)
-export const getFarmerByIdForAdmin = createAsyncThunk(
-  "auth/getFarmerByIdForAdmin",
+// ✅ Delete Farmer by ID
+export const deleteFarmerById = createAsyncThunk(
+  'farmers/deleteFarmerById',
   async (farmerId, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get(`/farmer/getbyadmin/${farmerId}`);
+      const res = await axiosInstance.delete(`/admin/delete-farmer/${farmerId}`);
+      return { farmerId, message: res.data.message };
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to delete farmer');
+    }
+  }
+);
+
+// ✅ Get Farmer by ID (Admin)
+export const getFarmerByIdForAdmin = createAsyncThunk(
+  'auth/getFarmerByIdForAdmin',
+  async (farmerId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(`/get/farmer-details/${farmerId}`);
       return res.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: "Failed to fetch farmer" });
+      return rejectWithValue(error.response?.data || { message: 'Failed to fetch farmer' });
     }
   }
 );
 
-
-// Get Farmer by ID (Separate state for farmer details)
-
+// ✅ Get Farmer by ID (Customer view)
 export const getFarmerDetailsById = createAsyncThunk(
-  "auth/getFarmerDetailsById",
+  'auth/getFarmerDetailsById',
   async (farmerId, { rejectWithValue }) => {
     try {
-
       const response = await axiosInstance.get(`/get/farmer-details/${farmerId}`);
-
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || { message: "Failed to fetch farmer" });
+      return rejectWithValue(error.response?.data || { message: 'Failed to fetch farmer' });
     }
   }
 );
 
-
-
+// ✅ Get Referral Detail
 export const getFarmerReferralDetail = createAsyncThunk(
-
-  "farmer/getFarmerReferralDetail",
+  'farmer/getFarmerReferralDetail',
   async (farmerId, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(`/farmer/referral-details/${farmerId}`);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data.message || "Failed to fetch");
+      return rejectWithValue(err.response?.data?.message || 'Failed to fetch referral detail');
     }
   }
-
 );
 
-
-// 🔄 Thunk to fetch point transactions by farmerId
+// ✅ Get Point Transactions
 export const fetchPointTransactions = createAsyncThunk(
-  "pointTransactions/fetch",
+  'pointTransactions/fetch',
   async (farmerId, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(`/farmer/points-transaction/${farmerId}`);
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data);
+      return rejectWithValue(err.response?.data);
     }
   }
 );
 
-
 const farmersSlice = createSlice({
-  
   name: 'farmers',
   initialState: {
     farmers: [],
@@ -90,6 +107,8 @@ const farmersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+
+      // 🔄 Fetch All Farmers
       .addCase(fetchFarmers.pending, (state) => {
         state.loading = true;
       })
@@ -102,6 +121,43 @@ const farmersSlice = createSlice({
         state.error = action.error.message;
       })
 
+      // 🔄 Update Farmer By ID
+      .addCase(updateFarmerById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateFarmerById.fulfilled, (state, action) => {
+        state.loading = false;
+        const updatedFarmer = action.payload;
+        const index = state.farmers.findIndex(f => f._id === updatedFarmer._id);
+        if (index !== -1) {
+          state.farmers[index] = updatedFarmer;
+        }
+        state.farmerDetails = updatedFarmer;
+      })
+      .addCase(updateFarmerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // 🔄 Delete Farmer
+      .addCase(deleteFarmerById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteFarmerById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.farmers = state.farmers.filter(farmer => farmer._id !== action.payload.farmerId);
+        if (state.farmerDetails?._id === action.payload.farmerId) {
+          state.farmerDetails = null;
+        }
+      })
+      .addCase(deleteFarmerById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // 🔄 Referral Detail
       .addCase(getFarmerReferralDetail.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -115,6 +171,7 @@ const farmersSlice = createSlice({
         state.error = action.payload;
       })
 
+      // 🔄 Point Transactions
       .addCase(fetchPointTransactions.pending, (state) => {
         state.loading = true;
       })
@@ -124,10 +181,10 @@ const farmersSlice = createSlice({
       })
       .addCase(fetchPointTransactions.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Something went wrong";
+        state.error = action.payload?.message || 'Something went wrong';
       })
 
-      // Get Farmer by ID (Separating from user)
+      // 🔄 Get Farmer By ID (Admin)
       .addCase(getFarmerByIdForAdmin.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -138,10 +195,10 @@ const farmersSlice = createSlice({
       })
       .addCase(getFarmerByIdForAdmin.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to fetch farmer";
+        state.error = action.payload?.message || 'Failed to fetch farmer';
       })
 
-      // Get Farmer by ID (Separating from user)
+      // 🔄 Get Farmer By ID (Customer)
       .addCase(getFarmerDetailsById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -152,10 +209,8 @@ const farmersSlice = createSlice({
       })
       .addCase(getFarmerDetailsById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload?.message || "Failed to fetch farmer";
-      })
-
-
+        state.error = action.payload?.message || 'Failed to fetch farmer';
+      });
   },
 });
 

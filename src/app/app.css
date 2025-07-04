@@ -698,3 +698,33 @@ ul.ProductPagination {
 .product-card__thumb{
     overflow: hidden !important;
 }
+
+
+  .admin-content {
+      margin-left: 250px;
+      margin-top: 60px;
+      padding: 1rem;
+      min-height: calc(100vh - 60px);
+      background-color: #f8f9fa;
+      overflow-y: auto;
+    }
+
+    /* Scrollbar styles */
+    .admin-sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 10px;
+    }
+
+    .admin-sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Firefox */
+    .admin-sidebar {
+      scrollbar-width: thin;
+      scrollbar-color: #ccc transparent;
+    }

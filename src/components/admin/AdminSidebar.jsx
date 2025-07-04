@@ -5,7 +5,7 @@ import { Nav } from "react-bootstrap";
 
 const AdminSidebar = () => {
   return (
-    <div className="bg-light vh-100 p-3" style={{ width: "250px" }}>
+    <div className="bg-light vh-100 p-3 admin-sidebar" style={{ width: "250px" }}>
       <h5 className="mb-20">Navigation</h5>
       <Nav defaultActiveKey="/admin" className="flex-column">
         <Link className="admin-accordion-button  nav-link" href="/admin">Dashboard</Link>
@@ -15,6 +15,10 @@ const AdminSidebar = () => {
         <Link className="admin-accordion-button  nav-link" href="/admin/customers">Customers</Link>
 
         <Link className="admin-accordion-button  nav-link" href="/admin/farmers">Farmers List</Link>
+
+        <Link className="admin-accordion-button  nav-link" href="/admin/shops-list">Farmer's Shops</Link>
+
+        <Link className="admin-accordion-button  nav-link" href="/admin/products-list">Farmer's Products</Link>
 
         <Link className="admin-accordion-button  nav-link" href="/admin/kyc-requests">KYC Requests</Link>
 

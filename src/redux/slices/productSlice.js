@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/utils/axiosInstance";
 
+
 // Fetch products
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
@@ -8,21 +9,23 @@ export const fetchProducts = createAsyncThunk(
     const response = await axiosInstance.get("/products", {
       params: { page, limit, search, filter },
     });
-
-    return response.data; // Return full response, not just products
+    return response.data;
   }
 );
 
 
 // Fetch product by ID
-export const getProductById = createAsyncThunk('products/getById', async (id, { rejectWithValue }) => {
-  try {
-    const response = await axiosInstance.get(`/product/${id}`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data);
+export const getProductById = createAsyncThunk(
+  "products/getById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/product/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
-});
+);
 
 
 // Fetch product by farmer ID
@@ -30,16 +33,16 @@ export const getProductByFarmerId = createAsyncThunk(
   "products/getProductByFarmerId",
   async (farmerId, { rejectWithValue }) => {
     try {
-
-      const productId = localStorage.getItem("farmerId")
-
       const response = await axiosInstance.get(`/farmer-products/${farmerId}`);
-      return response.data.data; // Assuming API returns { success: true, data: product }
+      return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || "Failed to fetch product");
+      return rejectWithValue(
+        error.response.data.message || "Failed to fetch product"
+      );
     }
   }
 );
+
 
 // Add product
 export const addProduct = createAsyncThunk(
@@ -51,10 +54,31 @@ export const addProduct = createAsyncThunk(
       });
       return response.data.product;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || "Failed to add product");
+      return rejectWithValue(
+        error.response.data.message || "Failed to add product"
+      );
     }
   }
 );
+
+
+// Update product
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ id, shopData }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.put(`/product/${id}`, shopData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return response.data.product;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to update product"
+      );
+    }
+  }
+);
+
 
 // Delete product
 export const deleteProduct = createAsyncThunk(
@@ -64,46 +88,48 @@ export const deleteProduct = createAsyncThunk(
       await axiosInstance.delete(`/product/${productId}`);
       return productId;
     } catch (error) {
-      return rejectWithValue(error.response.data.message || "Failed to delete product");
+      return rejectWithValue(
+        error.response.data.message || "Failed to delete product"
+      );
     }
   }
 );
+
 
 // Fetch products by Category ID
 export const fetchProductsByCategory = createAsyncThunk(
   "products/fetchProductsByCategory",
   async (categoryId, { rejectWithValue }) => {
     try {
-
-
-
       const response = await axiosInstance.get(`/products/category/${categoryId}`);
-
-
-
-      return response.data.products; // API response me se sirf products return kar rahe hain
+      return response.data.products;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Failed to fetch products");
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch products"
+      );
     }
   }
 );
 
+// Slice
 const productSlice = createSlice({
   name: "products",
   initialState: {
     data: [],
-    categoryProducts: [], // 🆕 Category-wise products
+    categoryProducts: [],
     productByFarmer: null,
     totalPages: 0,
     currentPage: 1,
     status: "idle",
-    productcategoryStatus: "idle", // 🆕 Status for category products
+    productcategoryStatus: "idle",
     error: null,
     addProductStatus: "idle",
     addProductError: null,
     fetchProductByFarmerStatus: "idle",
     deleteProductStatus: "idle",
-    selectedProduct: null, // Selected Product 
+    updateProductStatus: "idle",
+    updateProductError: null,
+    selectedProduct: null,
   },
   reducers: {
     resetAddProductState: (state) => {
@@ -111,7 +137,7 @@ const productSlice = createSlice({
       state.addProductError = null;
     },
     setSelectedProduct: (state, action) => {
-      state.selectedProduct = action.payload; // select product to store in modal
+      state.selectedProduct = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -122,7 +148,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.data = action.payload.products;  // ✅ Fix: Correctly update state
+        state.data = action.payload.products;
         state.totalPages = action.payload.totalPages;
         state.currentPage = action.payload.currentPage;
       })
@@ -158,13 +184,31 @@ const productSlice = createSlice({
         state.addProductError = action.payload;
       })
 
+      // Update product
+      .addCase(updateProduct.pending, (state) => {
+        state.updateProductStatus = "loading";
+        state.updateProductError = null;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.updateProductStatus = "succeeded";
+        const index = state.data.findIndex((p) => p._id === action.payload._id);
+        if (index !== -1) {
+          state.data[index] = action.payload;
+        }
+        state.selectedProduct = null;
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.updateProductStatus = "failed";
+        state.updateProductError = action.payload;
+      })
+
       // Delete product
       .addCase(deleteProduct.pending, (state) => {
         state.deleteProductStatus = "loading";
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.deleteProductStatus = "succeeded";
-        state.data = state.data.filter(product => product._id !== action.payload);
+        state.data = state.data.filter((product) => product._id !== action.payload);
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.deleteProductStatus = "failed";
@@ -177,7 +221,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
         state.productcategoryStatus = "succeeded";
-        state.categoryProducts = action.payload; // ✅ Update category products state
+        state.categoryProducts = action.payload;
       })
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
         state.productcategoryStatus = "failed";
@@ -186,16 +230,11 @@ const productSlice = createSlice({
 
       // Fetch product by ID
       .addCase(getProductById.fulfilled, (state, action) => {
-        state.product = action.payload;  // Update selected product
-        state.status = 'succeeded';
-      })
-
-
-
-
+        state.product = action.payload;
+        state.status = "succeeded";
+      });
   },
 });
 
 export const { resetAddProductState, setSelectedProduct } = productSlice.actions;
-
 export default productSlice.reducer;
