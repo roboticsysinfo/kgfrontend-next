@@ -84,7 +84,7 @@ const ShopDetailsScreen = () => {
                                             />
 
                                         </span>
-    
+
                                     </div>
                                     <div className="mt-32">
                                         <h6 className="text-white fw-semibold mb-12">
@@ -189,7 +189,7 @@ const ShopDetailsScreen = () => {
 
                                 <div className='row'>
 
-                                    {products.length > 0 ? (
+                                    {products && products.length > 0 ? (
                                         products.map((product) => (
 
                                             <div key={product._id} className='col-lg-4 col-md-6 col-xs-12 col-sm-12 mb-30' >
@@ -252,15 +252,19 @@ const ShopDetailsScreen = () => {
 
                                             </div>
 
-
                                         ))
                                     ) : (
-
-                                        <p>No products available.</p>
-
+                                        <div className="col-12">
+                                            <div className="p-5 bg-light text-center border border-dashed rounded-4">
+                                                <h5 className="text-muted">No products available in this shop yet.</h5>
+                                            </div>
+                                        </div>
                                     )}
 
                                 </div>
+
+
+
 
                             </div>
 
