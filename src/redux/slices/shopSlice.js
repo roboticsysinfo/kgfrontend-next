@@ -30,6 +30,7 @@ export const fetchShopById = createAsyncThunk(
   }
 );
 
+
 // Create shop
 export const createShop = createAsyncThunk(
   'shop/createShop',
@@ -44,6 +45,7 @@ export const createShop = createAsyncThunk(
     }
   }
 );
+
 
 // Update shop
 export const updateShop = createAsyncThunk(
@@ -60,6 +62,7 @@ export const updateShop = createAsyncThunk(
   }
 );
 
+
 // Delete shop
 export const deleteShop = createAsyncThunk(
   'shop/deleteShop',
@@ -73,6 +76,7 @@ export const deleteShop = createAsyncThunk(
   }
 );
 
+
 // Get shops by category (preferred_buyers or pricing_preference)
 export const getShopsByCategory = createAsyncThunk(
   'shop/getShopsByCategory',
@@ -85,6 +89,7 @@ export const getShopsByCategory = createAsyncThunk(
     }
   }
 );
+
 
 // Search shops by keyword, location, and category
 export const searchShops = createAsyncThunk(

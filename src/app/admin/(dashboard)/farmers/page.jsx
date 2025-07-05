@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchFarmers, deleteFarmerById } from '@/redux/slices/farmerSlice';
 import DataTable from 'react-data-table-component';
@@ -11,16 +11,26 @@ import { FaEdit, FaRegTrashAlt } from 'react-icons/fa';
 const FarmersPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { farmers, loading, error } = useSelector((state) => state.farmers);
+
+  const {
+    farmers,
+    loading,
+    error,
+    totalFarmers,
+    currentPage,
+  } = useSelector((state) => state.farmers);
 
   const [searchQuery, setSearchQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 10;
 
   useEffect(() => {
-    dispatch(fetchFarmers());
-  }, [dispatch]);
+    dispatch(fetchFarmers({ page, limit, search: searchQuery }));
+  }, [dispatch, page, searchQuery]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+    setPage(1); // Reset to first page on search
   };
 
   const handleEdit = (id) => {
@@ -34,18 +44,11 @@ const FarmersPage = () => {
     const res = await dispatch(deleteFarmerById(id));
     if (!res.error) {
       toast.success('Farmer deleted successfully');
+      dispatch(fetchFarmers({ page, limit, search: searchQuery }));
     } else {
       toast.error(res.payload || 'Failed to delete farmer');
     }
   };
-
-  const filteredFarmers = [...farmers]
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-    .filter((farmer) =>
-      farmer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      farmer.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      farmer.phoneNumber.toString().includes(searchQuery)
-    );
 
   const columns = [
     {
@@ -137,10 +140,18 @@ const FarmersPage = () => {
       {error && <p className="text-danger">{error}</p>}
 
       <DataTable
+        key={page} // Force re-render on page change
         columns={columns}
-        data={filteredFarmers}
+        data={farmers}
         pagination
+        paginationServer
+        paginationTotalRows={totalFarmers}
+        paginationPerPage={limit}
+        paginationDefaultPage={page}
+        onChangePage={(newPage) => setPage(newPage)}
         responsive
+        highlightOnHover
+        striped
       />
     </div>
   );
