@@ -37,7 +37,7 @@ const FooterOne = () => {
                             <div className="footer-item__logo">
                                 <Link href="/">
                                     {" "}
-                                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL_PRIMARY}${siteDetails?.siteLogo}`} alt="" />
+                                    <img src="/assets/images/kg-logov2.jpg" alt="" />
                                 </Link>
                             </div>
                             <p className="mb-24">

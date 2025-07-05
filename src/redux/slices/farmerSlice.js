@@ -1,11 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/utils/axiosInstance';
 
-// 🚜 Fetch All Farmers
-export const fetchFarmers = createAsyncThunk('farmers/fetchFarmers', async () => {
-  const response = await axiosInstance.get('/farmers');
-  return response.data;
-});
+
+// 🚜 Fetch All Farmers with pagination and search
+export const fetchFarmers = createAsyncThunk(
+  'farmers/fetchFarmers',
+  async ({ page = 1, limit = 10, search = '' }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/farmers?page=${page}&limit=${limit}&search=${search}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch farmers');
+    }
+  }
+);
+
+
+
 
 // ✅ Update Farmer by ID (with file support)
 export const updateFarmerById = createAsyncThunk(
@@ -97,6 +108,9 @@ const farmersSlice = createSlice({
   name: 'farmers',
   initialState: {
     farmers: [],
+    totalFarmers: 0,
+    currentPage: 1,
+    totalPages: 1,
     pointsTransactions: [],
     farmerDetails: null,
     farmerDetailsforCustomer: null,
@@ -111,15 +125,20 @@ const farmersSlice = createSlice({
       // 🔄 Fetch All Farmers
       .addCase(fetchFarmers.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchFarmers.fulfilled, (state, action) => {
         state.loading = false;
-        state.farmers = action.payload;
+        state.farmers = action.payload.farmers; // array of farmers
+        state.totalFarmers = action.payload.total;
+        state.currentPage = action.payload.currentPage;
+        state.totalPages = action.payload.totalPages;
       })
       .addCase(fetchFarmers.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload;
       })
+
 
       // 🔄 Update Farmer By ID
       .addCase(updateFarmerById.pending, (state) => {

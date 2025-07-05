@@ -36,7 +36,7 @@ const HeaderOne = () => {
   if (userInfoString) {
     try {
       userInfo = JSON.parse(userInfoString);
-      userId = userInfo?.id || userInfo?._id;  // user id किस फील्ड में है देखो
+      userId = userInfo?.id || userInfo?._id;  
       console.log("userinfo name", userInfo.name);
       console.log("userid header", userId);
     } catch (error) {
