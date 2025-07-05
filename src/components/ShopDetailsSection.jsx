@@ -211,19 +211,6 @@ const ShopDetailsScreen = () => {
                                                             />
 
                                                         </Link>
-
-                                                        <div className="position-absolute inset-block-start-0 inset-inline-start-0 mt-16 ms-16 z-1 d-flex flex-column gap-8">
-                                                            {product.discount && (
-                                                                <span className="text-main-two-600 w-40 h-40 d-flex justify-content-center align-items-center bg-white rounded-circle shadow-sm text-xs fw-semibold">
-                                                                    {product.discount}%
-                                                                </span>
-                                                            )}
-                                                            {product.label && (
-                                                                <span className="text-neutral-600 w-40 h-40 d-flex justify-content-center align-items-center bg-white rounded-circle shadow-sm text-xs fw-semibold">
-                                                                    {product.label}
-                                                                </span>
-                                                            )}
-                                                        </div>
                                                     </div>
 
                                                     <div className="product-card__content mt-16 w-100">
@@ -234,14 +221,14 @@ const ShopDetailsScreen = () => {
                                                             </Link>
                                                         </h6>
 
-                                                        <span className="py-2 px-8 text-xs rounded-pill text-main-two-600 bg-main-two-50 mt-16">
+                                                        <span className="py-2 px-8 text-xs rounded-pill text-main-two-600 bg-main-two-50 mt-0">
                                                             by {product.shop_id?.shop_name}
                                                         </span>
-                                                        <div className="product-card__price mt-16 mb-30">
+                                                        <div className="product-card__price mt-16 mb-20">
                                                             <span className="mb-[6px] text-[#191919] text-base font-medium font-['Poppins'] leading-normal">
                                                                 Rs{product.price_per_unit}
                                                             </span>
-
+                                                            {" "}/ {" "}
                                                             <span className="text-heading text-md fw-semibold">
                                                                 {product.quantity} <span className="text-gray-500 fw-normal">/Qty</span>
                                                             </span>

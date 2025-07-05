@@ -124,7 +124,7 @@ export const fetchProductsByShopId = createAsyncThunk(
         `/shop-products/${shopId}`
       );
 
-      return response.data; // Assuming response contains products array
+      return response.data.data; // Assuming response contains products array
     } catch (error) {
       console.error("Error fetching products:", error);
       return rejectWithValue(error.response?.data?.message || "Something went wrong");
