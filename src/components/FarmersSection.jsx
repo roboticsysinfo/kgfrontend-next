@@ -60,11 +60,17 @@ const FarmersSection = () => {
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
-    setPage(1); // Reset to first page on new search
+    setPage(1); // Reset to first page
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <div className="container py-16 my-80">
+      {/* Search */}
       <div className="row mb-4">
         <div className="col-12">
           <input
@@ -77,6 +83,7 @@ const FarmersSection = () => {
         </div>
       </div>
 
+      {/* Farmers */}
       <div className="row">
         {(loading || requestLoading) && <p className="text-center">Loading...</p>}
         {error && <p className="text-red-500 text-center">Error: {error}</p>}
@@ -134,26 +141,26 @@ const FarmersSection = () => {
         })}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="row mt-4">
           <div className="col-12 text-center">
             <nav>
               <ul className="pagination justify-content-center">
                 <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
-                  <button className="page-link" onClick={() => setPage((prev) => Math.max(prev - 1, 1))}>
+                  <button className="page-link" onClick={() => handlePageChange(Math.max(page - 1, 1))}>
                     Previous
                   </button>
                 </li>
                 {Array.from({ length: totalPages }, (_, i) => (
                   <li key={i} className={`page-item ${page === i + 1 ? 'active' : ''}`}>
-                    <button className="page-link" onClick={() => setPage(i + 1)}>
+                    <button className="page-link" onClick={() => handlePageChange(i + 1)}>
                       {i + 1}
                     </button>
                   </li>
                 ))}
                 <li className={`page-item ${page === totalPages ? 'disabled' : ''}`}>
-                  <button className="page-link" onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}>
+                  <button className="page-link" onClick={() => handlePageChange(Math.min(page + 1, totalPages))}>
                     Next
                   </button>
                 </li>
