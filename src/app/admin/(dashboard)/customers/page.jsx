@@ -25,18 +25,20 @@ const Page = () => {
     const columns = [
         {
             name: "Profile Image",
-            cell: (row) =>
-                row.profile_image ? (
-                    <img
-                        src={row.profile_image}
-                        alt={row.name}
-                        width={50}
-                        height={50}
-                    />
-                ) : (
-                    "No Image"
-                ),
+            cell: (row) => (
+                <img
+                    src={
+                        row.profile_image
+                            ? row.profile_image
+                            : "https://cdn-icons-png.flaticon.com/128/3135/3135715.png"
+                    }
+                    alt={row.name || "User"}
+                    width={50}
+                    height={50}
+                />
+            ),
         },
+
         {
             name: "Name",
             selector: (row) => row.name,
@@ -92,7 +94,7 @@ const Page = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             <DataTable
                 columns={columns}
-                data={customers || []}
+                data={[...(customers || [])].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))}
                 progressPending={loading}
                 pagination
                 highlightOnHover
