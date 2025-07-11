@@ -185,7 +185,7 @@ const KGMobileAppsSection = () => {
 
                         <div className='col-lg-12 text-center'>
                             <p className='mt-30 fw-bold'>
-                                Kissan Growth Customer App today and buy fresh products directly from farms!
+                               Download the Kissan Growth Customer App today and buy fresh products directly from farms!
                             </p>
                             <Link
                                 href="https://play.google.com/store/apps/details?id=com.kissangrowthcustomer"
