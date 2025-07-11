@@ -71,6 +71,23 @@ const KGMobileAppsSection = () => {
                             </div>
                         </div>
 
+                        <div className='col-lg-12 text-center'>
+                            <p className='mt-30 fw-bold'>
+                                Download the Kissan Growth Farmer App today to sell directly to customers — no middlemen, more profit!
+                            </p>
+                            <Link
+                                href="https://play.google.com/store/apps/details?id=com.kissangrowthfarmer"
+                                className="btn btn-main d-inline-flex align-items-center mt-20 mb-30 rounded-pill gap-8"
+                                style={{ height: 60 }}
+                            >
+                                <span className="icon text-xl d-flex">
+                                    <i className="ph ph-google-play-logo"></i>
+                                </span>
+                                Download on Mobile Now
+
+                            </Link>
+                        </div>
+
                     </div>
 
 
@@ -165,6 +182,24 @@ const KGMobileAppsSection = () => {
                                 <Image src="/assets/app_screenshots/customer/customer3.jpg" width={251} height={497} alt="" />
                             </div>
                         </div>
+
+                        <div className='col-lg-12 text-center'>
+                            <p className='mt-30 fw-bold'>
+                                Kissan Growth Customer App today and buy fresh products directly from farms!
+                            </p>
+                            <Link
+                                href="https://play.google.com/store/apps/details?id=com.kissangrowthcustomer"
+                                className="btn btn-main d-inline-flex align-items-center mt-20 mb-30 rounded-pill gap-8"
+                                style={{ height: 60 }}
+                            >
+                                <span className="icon text-xl d-flex">
+                                    <i className="ph ph-google-play-logo"></i>
+                                </span>
+                                Download on Mobile Now
+
+                            </Link>
+                        </div>
+
                     </div>
 
                     <div className='col-lg-12 col-xs-12 col-sm-12'>
