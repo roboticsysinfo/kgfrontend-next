@@ -67,6 +67,12 @@ export default function RootLayout({ children }) {
             }
           })}
         </Script>
+
+        <link
+          rel="canonical"
+          href="https://kissangrowth.com"
+        />
+
       </head>
 
       <body suppressHydrationWarning={true}>
