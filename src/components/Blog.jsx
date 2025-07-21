@@ -133,9 +133,9 @@ const BlogItem = ({ blog }) => (
         </Link>
       </h6>
 
-      <p className="text-gray-700 text-line-2">
-        <div dangerouslySetInnerHTML={{ __html: blog.blog_content.substring(0, 500) || "No content available" }} />
-      </p>
+
+        <div className='text-gray-700 text-line-2' dangerouslySetInnerHTML={{ __html: blog.blog_content.substring(0, 500) || "No content available" }} />
+
 
       <div className="flex-align flex-wrap gap-24 pt-24 mt-24 border-top border-gray-100">
         <div className="flex-align flex-wrap gap-8">

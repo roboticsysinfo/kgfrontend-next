@@ -17,6 +17,9 @@ const BlogDetails = ({ blog }) => {
 
     if (!blog || !blog.data) return null;
 
+    console.log("blog", blog);
+    
+
     const blogData = blog.data;
 
     // Client side view count increment
