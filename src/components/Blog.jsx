@@ -128,7 +128,7 @@ const BlogItem = ({ blog }) => (
       </span>
 
       <h6 className="text-2xl mb-24">
-        <Link href={`/blog/${blog.blog_title.replace(/\s+/g, '-').toLowerCase()}-${blog._id}`}>
+        <Link href={`/blog/${blog.blog_title.replace(/\s+/g, '-').toLowerCase()}/${blog._id}`}>
           {blog.blog_title}
         </Link>
       </h6>

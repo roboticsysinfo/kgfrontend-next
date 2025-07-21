@@ -14,37 +14,34 @@ const stripHtml = (html) => {
   return html.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 };
 
-export async function generateMetadata(props) {
-  const { params } = await props;
-  const blogId = extractIdFromSlug(params.slug);
+export async function generateMetadata({ params }) {
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URI}/blog/${params.id}`, {
+            next: { revalidate: 60 }, // Revalidate every 60 seconds
+        });
+        const data = await res.json();
+        const blog = data?.data;
 
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URI}/blog/${blogId}`, {
-      next: { revalidate: 60 },
-    });
+        console.log("data", data);
+        console.log("blog", blog);
 
-    if (!res.ok) throw new Error("Failed to fetch blog metadata");
-
-    const blog = await res.json();
-
-    const cleanDescription = stripHtml(blog.description).slice(0, 160);
-
-    return {
-      title: blog.metaTitle || blog.blog_title || "Blog",
-      description: blog.metaDescription || cleanDescription || "Blog description not available",
-      keywords: blog.metaKeywords || "blog, article, post",
-    };
-  } catch (error) {
-    return {
-      title: "Blog Not Found",
-      description: "Blog not available",
-    };
-  }
+        return {
+            title: blog?.metaTitle || 'Blog Detail',
+            description: blog?.metaDescription || 'Blog detail page',
+            keywords: blog?.metaKeywords || 'Blog Keywords',
+        };
+    } catch (error) {
+        return {
+            title: 'Blog Detail',
+            description: 'Blog detail page',
+            keywords: blog?.metaKeywords || 'Blog Keywords',
+        };
+    }
 }
 
 const Page = async (props) => {
   const { params } = await props;
-  const blogId = extractIdFromSlug(params.slug);
+  const blogId = extractIdFromSlug(params.id);
 
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URI}/blog/${blogId}`, {
