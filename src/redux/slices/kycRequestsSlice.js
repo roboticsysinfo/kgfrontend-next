@@ -30,7 +30,7 @@ export const rejectKYCRequest = createAsyncThunk(
   'kycRequests/rejectKYCRequest',
   async (id, { rejectWithValue }) => {
     try {
-      await axiosInstance.put(`/admin/kyc-request/reject/${id}`);
+      await axiosInstance.put(`/farmer/kyc-request/reject-by-admin/${id}`);
       return { id }; // 👈 Return ID manually
     } catch (error) {
       return rejectWithValue(error.response?.data || "Something went wrong");
