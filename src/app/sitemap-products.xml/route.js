@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 
 export async function GET() {
-  const baseUrl = 'https://kissangrowth.com';
+  const baseUrl = 'https://www.kissangrowth.com';
 
   try {
     const res = await fetch('https://kissangrowth.com/api/products?limit=50000', {

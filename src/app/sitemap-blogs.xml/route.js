@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 
 export async function GET() {
-  const baseUrl = 'https://kissangrowth.com';
+  const baseUrl = 'https://www.kissangrowth.com';
 
   const blogsRes = await fetch('https://kissangrowth.com/api/blogs?page=1&limit=50000', {
     next: { revalidate: 60 },

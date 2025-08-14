@@ -1,9 +1,9 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://kissangrowth.com/sitemap.xml
-Sitemap: https://kissangrowth.com/sitemap-products.xml
-Sitemap: https://kissangrowth.com/sitemap-pages.xml
-Sitemap: https://kissangrowth.com/sitemap-farmers.xml
-Sitemap: https://kissangrowth.com/sitemap-products.xml
-Sitemap: https://kissangrowth.com/sitemap-blogs.xml
+Sitemap: https://www.kissangrowth.com/sitemap.xml
+Sitemap: https://www.kissangrowth.com/sitemap-products.xml
+Sitemap: https://www.kissangrowth.com/sitemap-pages.xml
+Sitemap: https://www.kissangrowth.com/sitemap-farmers.xml
+Sitemap: https://www.kissangrowth.com/sitemap-products.xml
+Sitemap: https://www.kissangrowth.com/sitemap-blogs.xml

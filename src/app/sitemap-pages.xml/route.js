@@ -1,5 +1,5 @@
 export async function GET() {
-  const baseUrl = 'https://kissangrowth.com';
+  const baseUrl = 'https://www.kissangrowth.com';
   const staticPages = [
     '',
     '/about-us',
