@@ -8,7 +8,6 @@ import { setCookie } from "cookies-next"; // ✅ Cookies import
 
 
 const AdminLogin = () => {
-
   
   const router = useRouter();
 
