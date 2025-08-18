@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
 
         <link
           rel="canonical"
-          href="https://www.kissangrowth.com"
+          href="https://kissangrowth.com"
         />
 
       </head>

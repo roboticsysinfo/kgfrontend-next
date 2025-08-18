@@ -1,7 +1,7 @@
 import slugify from 'slugify';
 
 export async function GET() {
-  const baseUrl = 'https://www.kissangrowth.com';
+  const baseUrl = 'https://kissangrowth.com';
   const res = await fetch('https://kissangrowth.com/api/farmer-shops?limit=50000');
   const json = await res.json();
   const shops = Array.isArray(json?.data) ? json.data : [];
