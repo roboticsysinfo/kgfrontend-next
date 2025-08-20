@@ -631,14 +631,14 @@ ul.ProductPagination {
     margin-top: 10px;
 }
 
-.farmer-card  .divider {
+.farmer-card .divider {
     margin: 16px 0;
     border: none;
     border-top: 1px solid #eee;
     width: 100%;
 }
 
-.farmer-card  .btn {
+.farmer-card .btn {
     padding: 10px 16px;
     font-size: 14px;
     font-weight: 600;
@@ -649,22 +649,22 @@ ul.ProductPagination {
     transition: background-color 0.3s ease;
 }
 
-.farmer-card  .btn-primary {
+.farmer-card .btn-primary {
     background-color: #2e7d32;
     color: white;
 }
 
-.farmer-card  .btn-primary:hover {
+.farmer-card .btn-primary:hover {
     background-color: #256329;
 }
 
- .farmer-card  .btn-warning {
+.farmer-card .btn-warning {
     background-color: #ffe082;
     color: #8d6e63;
     cursor: not-allowed;
 }
 
-.farmer-card  .btn-success {
+.farmer-card .btn-success {
     background-color: #a5d6a7;
     color: #1b5e20;
     cursor: not-allowed;
@@ -674,16 +674,16 @@ ul.ProductPagination {
 .blog-wrapper .blog-item a,
 .blog-wrapper .blog-item strong,
 .blog-wrapper .blog-item b {
-  display: inline !important;   
-  margin: 0 !important;
-  padding: 0 !important;
-  white-space: normal !important; 
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    white-space: normal !important;
 }
 
 .blog-item__content div p span {
-  display: inline !important;
-  margin: 0 !important;
-  padding: 0 !important;
+    display: inline !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 /* span {
@@ -691,40 +691,48 @@ ul.ProductPagination {
 } */
 
 .blog-wrapper .blog-item {
-  white-space: normal !important; 
-  line-height: 1.4 !important;
+    white-space: normal !important;
+    line-height: 1.4 !important;
 }
 
-.product-card__thumb{
+.product-card__thumb {
     overflow: hidden !important;
 }
 
+.banner-item__title {
+    font-size: 48px;
+    margin-bottom: 20px;
+    font-weight: bold !important;
+    color: #212529 !important;
+    line-height: 1.4 !important;
+}
 
-  .admin-content {
-      margin-left: 250px;
-      margin-top: 60px;
-      padding: 1rem;
-      min-height: calc(100vh - 60px);
-      background-color: #f8f9fa;
-      overflow-y: auto;
-    }
 
-    /* Scrollbar styles */
-    .admin-sidebar::-webkit-scrollbar {
-      width: 6px;
-    }
+.admin-content {
+    margin-left: 250px;
+    margin-top: 60px;
+    padding: 1rem;
+    min-height: calc(100vh - 60px);
+    background-color: #f8f9fa;
+    overflow-y: auto;
+}
 
-    .admin-sidebar::-webkit-scrollbar-thumb {
-      background-color: #ccc;
-      border-radius: 10px;
-    }
+/* Scrollbar styles */
+.admin-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
 
-    .admin-sidebar::-webkit-scrollbar-track {
-      background: transparent;
-    }
+.admin-sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
 
-    /* Firefox */
-    .admin-sidebar {
-      scrollbar-width: thin;
-      scrollbar-color: #ccc transparent;
-    }
+.admin-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Firefox */
+.admin-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}

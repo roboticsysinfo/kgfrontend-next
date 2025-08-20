@@ -25,7 +25,7 @@ const StaticBanner = () => {
 
                                     <div className="banner-item__content">
 
-                                        <h1 className="banner-item__title bounce mb-20">बेहतर खेती, ज़्यादा मुनाफ़ा! तुरंत Kissan Growth Farmer App डाउनलोड करें</h1>
+                                        <p className="banner-item__title bounce mb-20">बेहतर खेती, ज़्यादा मुनाफ़ा! तुरंत Kissan Growth Farmer App डाउनलोड करें</p>
                                         <Link
                                             href="https://play.google.com/store/apps/details?id=com.kissangrowthfarmer"
                                             className="btn btn-main d-inline-flex align-items-center mb-30 rounded-pill gap-8"

@@ -11,7 +11,7 @@ const HomeContent = () => {
                 <div className="container">
                     <div className="row justify-content-center mb-30">
                         <div className="col-lg-10">
-                            <h2 className="sectionheading text-4xl" style={styles.homeheading}>Kissan Growth: India’s #1 Farm Online Marketplace!</h2>
+                            <h1 className="sectionheading text-4xl" style={styles.homeheading}>Kissan Growth: India’s #1 Farm Online Marketplace!</h1>
                         </div>
                     </div>
 
