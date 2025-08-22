@@ -10,6 +10,11 @@ import slugify from "slugify";
 import { FaRupeeSign } from "react-icons/fa";
 import Link from "next/link";
 
+// Helper to safely slugify strings
+const slugifySafe = (text) => {
+  return slugify(typeof text === 'string' ? text : '', { lower: true, strict: true });
+};
+
 const ShopSection = () => {
   const [showModal, setShowModal] = useState(false);
   const [localPage, setLocalPage] = useState(1); // renamed to avoid conflict
@@ -115,12 +120,33 @@ const ShopSection = () => {
                                 {product.name}
                               </Link>
                             </h6>
-                            <div className="product-card__price my-20">
-                              <span className="text-heading text-md fw-semibold">
-                                <FaRupeeSign /> {product.price_per_unit}
+
+                            <div className="flex-align gap-4">
+                              <span className="text-main-600 text-md d-flex">
+                                <i className="ph-fill ph-storefront" />
                               </span>
-                              <span className="text-heading text-md fw-semibold"> per {product.unit} / {product.quantity} /Qty</span>
+                              <span className="text-gray-500 text-xs">
+                                By&ensp;
+                                {product.shop_id?.shop_name && product.shop_id?._id ? (
+                                  <Link
+                                    className="text-success"
+                                    href={`/shop/${slugifySafe(product.shop_id.shop_name)}-${product.shop_id._id}`}
+                                  >
+                                    {product.shop_id.shop_name}
+                                  </Link>
+                                ) : (
+                                  <span className="text-danger">Unknown Shop</span>
+                                )}
+                              </span>
                             </div>
+
+                            <div className="product-card__price mt-16 mb-16">
+                              <span className="text-heading text-md fw-semibold">
+                                <FaRupeeSign /> {product.price_per_unit} Per {product.unit} <br />
+                                <span className="text-gray-500 fw-normal">Quantity {product.quantity} {product.unit}</span>
+                              </span>
+                            </div>
+
                             <Button
                               className='btn btn-success btn-block w-100'
                               onClick={() => {

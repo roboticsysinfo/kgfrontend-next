@@ -14,6 +14,12 @@
     font-family: 'Quicksand';
 }
 
+.vendor-card img{
+   border-radius: 100px !important;
+   margin-top: 15px;
+}
+
+
 .vendor-card {
     height: 260px;
 }

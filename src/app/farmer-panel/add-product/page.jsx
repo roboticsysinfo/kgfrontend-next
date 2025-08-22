@@ -165,6 +165,7 @@ const AddProduct = ({ isEdit, productData }) => {
                 required
               >
                 <option value="">Select Unit</option>
+                <option value="quintal">quintal</option>
                 <option value="kg">kg</option>
                 <option value="liters">liters</option>
                 <option value="tons">tons</option>

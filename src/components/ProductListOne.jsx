@@ -31,6 +31,7 @@ const ProductListOne = () => {
         return <div>Error loading products</div>;
     }
 
+
     return (
         <div className="product mt-60 mb-60">
             <div className="container container-lg">
@@ -43,6 +44,7 @@ const ProductListOne = () => {
 
                 <div className="row mt-30 gy-4 g-12">
                     {products?.map((product) => {
+
                         const productSlug = slugifySafe(product.name);
 
                         return (
@@ -62,25 +64,9 @@ const ProductListOne = () => {
                                             format="webp" // Can be 'auto', 'webp', or 'avif'
                                         />
 
-                                        {/* <img
-                                            src={
-                                                product.product_image
-                                                    ? `${process.env.REACT_APP_BASE_URL_PRIMARY}${product.product_image}`
-                                                    : 'https://placehold.co/100x100'
-                                            }
-                                            alt={product.name || 'Product'}
-                                            loading='lazy'
-                                            width={300}
-                                            height={200}
-                                        /> */}
+
                                     </Link>
                                     <div className="product-card__content mt-12">
-                                        <div className="product-card__price mb-16">
-                                            <span className="text-heading text-md fw-semibold">
-                                                <FaRupeeSign /> {product.price_per_unit}{' '}
-                                                <span className="text-gray-500 fw-normal">/ {product.quantity}/ Qty</span>
-                                            </span>
-                                        </div>
 
                                         <h6 className="title text-lg fw-semibold mt-12 mb-8">
                                             <Link
@@ -90,6 +76,7 @@ const ProductListOne = () => {
                                                 {product.name}
                                             </Link>
                                         </h6>
+
                                         <div className="flex-align gap-4">
                                             <span className="text-main-600 text-md d-flex">
                                                 <i className="ph-fill ph-storefront" />
@@ -108,7 +95,16 @@ const ProductListOne = () => {
                                                 )}
                                             </span>
                                         </div>
+
+                                        <div className="product-card__price mt-16 mb-16">
+                                            <span className="text-heading text-md fw-semibold">
+                                                <FaRupeeSign /> {product.price_per_unit} Per {product.unit} <br />
+                                                <span className="text-gray-500 fw-normal">Quantity {product.quantity} {product.unit}</span>
+                                            </span>
+                                        </div>
+
                                         <div className="mt-12">
+
                                             <div
                                                 className="progress w-100 bg-color-three rounded-pill h-4"
                                                 role="progressbar"
@@ -122,7 +118,9 @@ const ProductListOne = () => {
                                                     style={{ width: '35%' }}
                                                 />
                                             </div>
+
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
