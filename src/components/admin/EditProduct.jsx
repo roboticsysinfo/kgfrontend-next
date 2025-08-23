@@ -20,6 +20,7 @@ const EditProduct = () => {
     season: 'seasonal',
     price_per_unit: '',
     quantity: '',
+    unit: 'kg', // ✅ default unit
     description: '',
     harvest_date: '',
     product_image: null,
@@ -42,12 +43,13 @@ const EditProduct = () => {
         season: selectedProduct.season || 'seasonal',
         price_per_unit: selectedProduct.price_per_unit || '',
         quantity: selectedProduct.quantity || '',
+        unit: selectedProduct.unit || 'kg',   // ✅ Prefill unit
         description: selectedProduct.description || '',
         harvest_date: selectedProduct.harvest_date?.split('T')[0] || '',
         product_image: null,
       });
     }
-  }, [selectedProduct, id]);
+  }, [selectedProduct, id, router]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -66,6 +68,7 @@ const EditProduct = () => {
     data.append('season', formData.season);
     data.append('price_per_unit', formData.price_per_unit);
     data.append('quantity', formData.quantity);
+    data.append('unit', formData.unit);  // ✅ Add unit
     data.append('description', formData.description);
     data.append('harvest_date', formData.harvest_date);
     if (formData.product_image) {
@@ -86,6 +89,7 @@ const EditProduct = () => {
     <div className="container mt-4">
       <h2>Edit Product</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
+        {/* Product Name */}
         <div className="mb-30">
           <label className="form-label">Product Name</label>
           <input
@@ -98,6 +102,7 @@ const EditProduct = () => {
           />
         </div>
 
+        {/* Category */}
         <div className="mb-30">
           <label className="form-label">Category</label>
           <select
@@ -116,6 +121,7 @@ const EditProduct = () => {
           </select>
         </div>
 
+        {/* Season */}
         <div className="mb-30">
           <label className="form-label">Season</label>
           <select
@@ -130,6 +136,7 @@ const EditProduct = () => {
           </select>
         </div>
 
+        {/* Price per Unit */}
         <div className="mb-30">
           <label className="form-label">Price per Unit</label>
           <input
@@ -142,6 +149,7 @@ const EditProduct = () => {
           />
         </div>
 
+        {/* Quantity */}
         <div className="mb-30">
           <label className="form-label">Quantity</label>
           <input
@@ -154,6 +162,26 @@ const EditProduct = () => {
           />
         </div>
 
+        {/* ✅ Unit */}
+        <div className="mb-30">
+          <label className="form-label">Unit</label>
+          <select
+            name="unit"
+            className="form-select"
+            value={formData.unit}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Unit</option>
+            <option value="kg">Kg</option>
+            <option value="quintal">Quintal</option>
+            <option value="liters">Liters</option>
+            <option value="tons">Tons</option>
+            <option value="pieces">Pieces</option>
+          </select>
+        </div>
+
+        {/* Harvest Date */}
         <div className="mb-30">
           <label className="form-label">Harvest Date</label>
           <input
@@ -165,6 +193,7 @@ const EditProduct = () => {
           />
         </div>
 
+        {/* Description */}
         <div className="mb-30">
           <label className="form-label">Description</label>
           <textarea
@@ -176,6 +205,7 @@ const EditProduct = () => {
           ></textarea>
         </div>
 
+        {/* Image Upload */}
         <div className="mb-30">
           <label className="form-label">Change Image</label>
           <input
@@ -187,6 +217,7 @@ const EditProduct = () => {
           />
         </div>
 
+        {/* Submit */}
         <button type="submit" className="btn btn-primary">
           Update Product
         </button>
